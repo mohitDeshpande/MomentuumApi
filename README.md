@@ -12,5 +12,5 @@ This is the Momentuum Web API built using .NET Core
 2. Open the solution in Visual Studio
 3. Run the project using Visual Studio
 
-### This project follow the [Git Flow Branching model](http://nvie.com/posts/a-successful-git-branching-model) for development. Please create your feature branch from `develop` branch and start developing in it and then open a pull request for to merge your code into the develop branch
+### This project follows the [Git Flow Branching model](http://nvie.com/posts/a-successful-git-branching-model) for development. Please create your feature branch from `develop` branch and start developing in it and then open a pull request to merge your code into the develop branch
 
