@@ -36,6 +36,9 @@ namespace MomentuumApi.Model
             }
         }
 
+        public MobileDBContext(DbContextOptions<MobileDBContext> options) : base(options)
+        { }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<LstType>(entity =>
