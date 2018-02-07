@@ -27,8 +27,9 @@ namespace MomentuumApi
         {
             services.AddMvc();
 
-            var connection = @"Server = 127.0.0.1,1433; Database = MobileDB; Trusted_Connection = False; uid = sa; pwd = password@123";
+            var connection = $"Server={Configuration["database:server"]},{Configuration["database:port"]};Database={Configuration["database:db"]};Trusted_Connection=False;uid={Configuration["database:uid"]};pwd={Configuration["database:pwd"]}";
             services.AddDbContext<MobileDBContext>(options => options.UseSqlServer(connection));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
