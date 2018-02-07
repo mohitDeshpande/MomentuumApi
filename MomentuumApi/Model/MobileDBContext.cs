@@ -32,7 +32,7 @@ namespace MomentuumApi.Model
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(@"Server=127.0.0.1,1433;Database=MobileDB;Trusted_Connection=False;uid=sa;pwd=password@123");
+                //optionsBuilder.UseSqlServer(@"Server=127.0.0.1,1433;Database=MobileDB;Trusted_Connection=False;uid=sa;pwd=password@123");
             }
         }
 
