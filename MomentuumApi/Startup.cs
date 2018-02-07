@@ -27,7 +27,7 @@ namespace MomentuumApi
         {
             services.AddMvc();
 
-            var connection = $"Server={Configuration["database:server"]},{Configuration["database:port"]};Database={Configuration["database:db"]};Trusted_Connection=True;uid={Configuration["database:uid"]};pwd={Configuration["database:pwd"]}";
+            var connection = $"Server={Configuration["database:server"]},{Configuration["database:port"]};Database={Configuration["database:db"]};Trusted_Connection=False;uid={Configuration["database:uid"]};pwd={Configuration["database:pwd"]}";
             services.AddDbContext<MobileDBContext>(options => options.UseSqlServer(connection));
 
         }
