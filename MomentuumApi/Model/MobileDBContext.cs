@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using MomentuumApi.Model;
 
 namespace MomentuumApi.Model
 {
@@ -16,6 +17,7 @@ namespace MomentuumApi.Model
         public virtual DbSet<TblEmployees> TblEmployees { get; set; }
         public virtual DbSet<TblLocationAddress> TblLocationAddress { get; set; }
         public virtual DbSet<TblPlan> TblPlan { get; set; }
+        public virtual DbSet<TblCaseItem> TblCaseItem { get; set; }
 
         // Unable to generate entity type for table 'dbo.lst_casecode'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.lst_casestatus'. Please see the warning messages.
@@ -31,16 +33,66 @@ namespace MomentuumApi.Model
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
+
             {
-                //optionsBuilder.UseSqlServer(@"Server=127.0.0.1,1433;Database=MobileDB;Trusted_Connection=False;uid=sa;pwd=password@123");
+                // optionsBuilder.UseSqlServer(@"Server=127.0.0.1,1433;Database=MobileDB;Trusted_Connection=False;uid=sa;pwd=password@123");
+                //  optionsBuilder.UseSqlServer(@"Data Source=DIVINEBRAD\SQLEXPRESS;Initial Catalog=MobileDB;Integrated Security=True");
             }
         }
 
         public MobileDBContext(DbContextOptions<MobileDBContext> options) : base(options)
         { }
 
+
+        
+
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            // Manual addition of Case Items due to lack of Primary Key on this table 
+            
+            modelBuilder.Entity<TblCaseItem>(entity =>
+            {
+                entity.ToTable("tbl_caseitem");
+                entity.HasKey(e => e.IntId);
+
+                entity.Property(e => e.IntId).HasColumnName("intid");
+
+                entity.Property(e => e.Caseid).HasColumnName("caseid");
+                entity.Property(e => e.CaseItemDate).HasColumnName("caseitemdate").HasMaxLength(25);
+
+                entity.Property(e => e.CaseItemDescription).HasColumnName("caseitemdescription").HasMaxLength(150);
+
+                entity.Property(e => e.CaseItemStatus).HasColumnName("caseitemstatus").HasMaxLength(25);
+
+                entity.Property(e => e.CaseItemDetail).HasColumnName("caseitemdetail").HasMaxLength(4000);
+
+                entity.Property(e => e.CaseItemAction).HasColumnName("caseitemaction").HasMaxLength(25);
+
+                entity.Property(e => e.CaseItemAssigned).HasColumnName("caseitemassigned").HasMaxLength(25);
+
+                entity.Property(e => e.CaseItemFollowUpdate).HasColumnName("caseitemfollowupdate").HasMaxLength(25);
+
+                entity.Property(e => e.Deleted).HasColumnName("deleted").HasMaxLength(25);
+
+                entity.Property(e => e.UserId).HasColumnName("userid").HasMaxLength(25);
+
+                entity.Property(e => e.TimeProcess).HasColumnName("timeprocess").HasMaxLength(25);
+
+                entity.Property(e => e.Priority).HasColumnName("priority").HasMaxLength(50);
+
+                entity.Property(e => e.CreatedBy).HasColumnName("createdby").HasMaxLength(255);
+
+                entity.Property(e => e.CreatedDate).HasColumnName("createddate").HasMaxLength(255);
+
+                entity.Property(e => e.UpdatedDate).HasColumnName("updateddate").HasMaxLength(255);
+            });
+
+            //
+
+            
             modelBuilder.Entity<LstType>(entity =>
             {
                 entity.HasKey(e => e.LocationId);
@@ -557,5 +609,6 @@ namespace MomentuumApi.Model
                 entity.Property(e => e.TotalFees).HasColumnName("total_fees");
             });
         }
+        
     }
 }
