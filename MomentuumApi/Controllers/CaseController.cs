@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MomentuumApi.Controllers
 {
-    [Produces("application/json")]
-    [Route("api/case")]
+	[Route("api/[controller]")]
+	[Produces("application/json")]
     public class CaseController : Controller
     {
 		private readonly MobileDBContext _context;
