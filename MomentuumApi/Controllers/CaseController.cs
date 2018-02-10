@@ -20,6 +20,7 @@ namespace MomentuumApi.Controllers
 			_context = context;
 		}
 
+		// GET: api/case
 		[HttpGet]
 		public IEnumerable<TblCase> GetAll()
 		{
