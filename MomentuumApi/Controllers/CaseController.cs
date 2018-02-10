@@ -12,7 +12,7 @@ namespace MomentuumApi.Controllers
     [Produces("application/json")]
     [Route("api/case")]
     public class CaseController : Controller
-    {
+	{
 		private readonly MobileDBContext _context;
 
 		public CaseController(MobileDBContext context)
@@ -25,7 +25,7 @@ namespace MomentuumApi.Controllers
 		{
 			return _context.TblCase.ToList();
 		}
-		
+
 		// GET: api/case/{id}
 		[HttpGet("{id}", Name = "GetCaseInfo")]
 		public IActionResult GetById(int id)
