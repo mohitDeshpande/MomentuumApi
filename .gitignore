@@ -38,3 +38,5 @@ Thumbs.db
 
 # dotCover
 *.dotCover
+/.vs/MomentuumApi/v15/Server/sqlite3
+/.vs/config
