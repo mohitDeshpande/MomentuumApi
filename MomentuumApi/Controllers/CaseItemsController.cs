@@ -10,7 +10,7 @@ using MomentuumApi.Model;
 namespace MomentuumApi.Controllers
 {
     [Produces("application/json")]
-    [Route("api/CaseItems")]
+    [Route("api/[controller]")]
     public class CaseItemsController : Controller
     {
         private readonly MobileDBContext _context;
@@ -20,12 +20,22 @@ namespace MomentuumApi.Controllers
             _context = context;
         }
 
+        // GET: api/CaseItems/case/1234, in order to get case items for a specific case
+        [Route("case/{id}")]
+        [HttpGet]
+        public IEnumerable<TblCaseItem> GetTblCaseItemByCase([FromRoute] int? id)
+        {
+            return _context.TblCaseItem.Where(i => i.Caseid.Equals(id));
+        }
+
         // GET: api/CaseItems
         [HttpGet]
         public IEnumerable<TblCaseItem> GetTblCaseItem()
         {
             return _context.TblCaseItem;
         }
+       
+
 
         // GET: api/CaseItems/5
         [HttpGet("{id}")]
