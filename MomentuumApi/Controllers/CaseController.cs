@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MomentuumApi.Model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MomentuumApi.Controllers
 {
@@ -21,14 +22,14 @@ namespace MomentuumApi.Controllers
 		}
 
 		// GET: api/case
-		[HttpGet]
+		[HttpGet, Authorize]
 		public IEnumerable<TblCase> GetAll()
 		{
 			return _context.TblCase.ToList();
 		}
 		
 		// GET: api/case/{id}
-		[HttpGet("{id}", Name = "GetCaseInfo")]
+        [HttpGet("{id}", Name = "GetCaseInfo"), Authorize]
 		public IActionResult GetById(int id)
 		{
 			var item = _context.TblCase.FirstOrDefault(t => t.Id == id);
