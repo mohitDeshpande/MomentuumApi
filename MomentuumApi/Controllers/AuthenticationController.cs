@@ -45,20 +45,10 @@ namespace MomentuumApi.Controllers
             return response;
         }
 
-        // POST api/auth/logout
-        [HttpPost]
-        public IActionResult Logout([FromBody]string value)
-        {
-            IActionResult response = BadRequest(new {error = "Token is Invalid"});
-
-            return response;
-        }
-
         /// <summary>
-        /// Builds the JwtToken for the user
+        /// Builds the JwtToken
         /// </summary>
-        /// <returns>The token.</returns>
-        /// <param name="user">User.</param>
+        /// <returns>Built JWT token as a string</returns>
         private string BuildToken()
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
