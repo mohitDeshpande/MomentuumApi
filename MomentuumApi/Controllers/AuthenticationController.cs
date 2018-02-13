@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -37,7 +38,7 @@ namespace MomentuumApi.Controllers
             TblEmployees employee = _context.TblEmployees.FirstOrDefault(emp => emp.EmployeeLogin.Equals(login.Username));
 
             if (employee != null && employee.UsrPassword.Equals(login.Password)) {
-                var tokenString = BuildToken();
+                var tokenString = BuildToken(login);
 
                 response = Ok(new { token = tokenString });
             }
@@ -46,16 +47,22 @@ namespace MomentuumApi.Controllers
         }
 
         /// <summary>
-        /// Builds the JwtToken
+        /// Builds the JwtToken.
+        /// The token consists of the encoded username under the claim JwtRegisteredClaimNames.NameId
         /// </summary>
-        /// <returns>Built JWT token as a string</returns>
-        private string BuildToken()
+        /// <returns>Built JWT token as an encoded string</returns>
+        private string BuildToken(LoginModel user)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
+            var claims = new[] {
+                new Claim(JwtRegisteredClaimNames.NameId, user.Username)
+            };
+
             var token = new JwtSecurityToken(_config["Jwt:Issuer"],
                                              _config["Jwt:Issuer"],
+                                             claims,
                                              expires: DateTime.Now.AddDays(Double.Parse(_config["Jwt:ExpireDays"])),
                                              signingCredentials: creds);
 

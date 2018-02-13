@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MomentuumApi.Utils;
 
 namespace MomentuumApi.Controllers
 {
@@ -18,10 +20,17 @@ namespace MomentuumApi.Controllers
         }
 
         // GET api/values/5
+        // example of getting a user id from the jwt token
         [HttpGet("{id}"), Authorize]
-        public string Get(int id)
+        public IActionResult Get(int id)
         {
-            return "value";
+            string user = "";
+            try {
+                user = JwtHelper.GetUser(HttpContext.User.Claims);
+            } catch (KeyNotFoundException e) {
+                return NotFound(e.ToString());
+            }
+            return Ok(user);
         }
 
         // POST api/values
