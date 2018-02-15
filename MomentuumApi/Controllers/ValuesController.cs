@@ -30,18 +30,22 @@ namespace MomentuumApi.Controllers
         // GET api/values/5
         // example of getting a user id from the jwt token
         [HttpGet("{id}"), Authorize]
-        public IEnumerable<TblEmployees> Get(int id)
+        public IActionResult Get(int id)
         {
             string user ="";
+
             try
             {
                 user = JwtHelper.GetUser(HttpContext.User.Claims);
             }
             catch (KeyNotFoundException e)
             {
-                return null;
+                return new ObjectResult(e);
             }
-            return _context.TblEmployees.Where(emp => emp.EmployeeLogin.Equals(user)).ToList();
+
+            var employee = _context.TblEmployees.Where(emp => emp.EmployeeLogin.Equals(user)).ToList();
+
+            return new ObjectResult(employee);
         }
 
         // POST api/values
