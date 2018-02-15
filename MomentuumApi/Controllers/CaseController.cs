@@ -27,22 +27,43 @@ namespace MomentuumApi.Controllers
 		{
 			return _context.TblCase.ToList();
 		}
-		
-		// GET: api/case/{id}
-        [HttpGet("{id}", Name = "GetCaseInfo"), Authorize]
-		public IActionResult GetById(int id)
-		{
-			var item = _context.TblCase.FirstOrDefault(t => t.Id == id);
-			var res = _context.TblClient
-		.Where(z => z.Id == id)
-		.Include(y => y.TblCase)
-		.ToList();
 
-			if (res == null)
+
+        // GET api/case/{id}
+        // getting the single case based on id
+        [HttpGet("{id}"), Authorize]
+        public IEnumerable<TblCase> GetCaseById(int id)
+        {
+            return _context.TblCase.Where(emp => emp.Caseid.Equals(id)).ToList();
+        }
+
+
+        // GET api/case/emp/{id}
+        // getting all the cases assigned to the Employee based on empployeelogin
+        [HttpGet("emp/{id}"), Authorize]
+        public IEnumerable<TblCase> GetCaseByEmpId(string id)
+        {
+            return _context.TblCase.Where(emp => emp.CaseAssignedTo.Equals(id)).ToList();
+        }
+
+        
+
+        // GET: api/case/client/emp/{id}
+        // getting all the cases with client details assigned to the Employee based on employeelogin
+        [HttpGet("client/emp/{id}"), Authorize]
+		public IActionResult GetCaseClientByEmpId(string id)
+		{
+
+            var clientCase = _context.TblCase
+                .Join(_context.TblClient, cas => cas.IdClient, cli => cli.Id, (cas, cli) => new { cas, cli })
+                .Where(x=> x.cas.CaseAssignedTo == id)
+                .ToList();
+
+			if (clientCase == null)
 			{
 				return NotFound();
 			}
-			return new ObjectResult(res);
+			return new ObjectResult(clientCase);
 		}
 	}
 }
