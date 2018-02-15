@@ -6,12 +6,20 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MomentuumApi.Utils;
+using MomentuumApi.Model;
 
 namespace MomentuumApi.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
+        private readonly MobileDBContext _context;
+
+        public ValuesController(MobileDBContext context)
+        {
+            _context = context;
+        }
+
         // GET api/values
         [HttpGet]
         public IEnumerable<string> Get()
@@ -22,15 +30,18 @@ namespace MomentuumApi.Controllers
         // GET api/values/5
         // example of getting a user id from the jwt token
         [HttpGet("{id}"), Authorize]
-        public IActionResult Get(int id)
+        public IEnumerable<TblEmployees> Get(int id)
         {
-            string user = "";
-            try {
+            string user ="";
+            try
+            {
                 user = JwtHelper.GetUser(HttpContext.User.Claims);
-            } catch (KeyNotFoundException e) {
-                return NotFound(e.ToString());
             }
-            return Ok(user);
+            catch (KeyNotFoundException e)
+            {
+                return null;
+            }
+            return _context.TblEmployees.Where(emp => emp.EmployeeLogin.Equals(user)).ToList();
         }
 
         // POST api/values
