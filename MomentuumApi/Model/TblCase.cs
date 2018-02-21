@@ -5,7 +5,7 @@ namespace MomentuumApi.Model
 {
     public partial class TblCase
     {
-        public int? Id { get; set; }
+        public int? IdClient { get; set; }
         public int Caseid { get; set; }
         public DateTime? CaseOpenDate { get; set; }
         public string Casetype { get; set; }
@@ -23,6 +23,6 @@ namespace MomentuumApi.Model
         public string Createddate { get; set; }
         public string Updateddate { get; set; }
 
-        public TblClient IdNavigation { get; set; }
+        //public TblClient IdNavigation { get; set; }
     }
 }

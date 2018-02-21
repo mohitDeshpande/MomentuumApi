@@ -167,7 +167,7 @@ namespace MomentuumApi.Model
                     .HasColumnName("deleted")
                     .HasMaxLength(25);
 
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.IdClient).HasColumnName("id");
 
                 entity.Property(e => e.Timeprocess)
                     .HasColumnName("timeprocess")
@@ -182,10 +182,10 @@ namespace MomentuumApi.Model
                     .HasColumnName("userid")
                     .HasMaxLength(25);
 
-                entity.HasOne(d => d.IdNavigation)
-                    .WithMany(p => p.TblCase)
-                    .HasForeignKey(d => d.Id)
-                    .HasConstraintName("FK_tbl_case_tbl_client");
+                //entity.HasOne(d => d.IdNavigation)
+                //    .WithMany()
+                //    .HasForeignKey(d => d.IdClient)
+                //    .HasConstraintName("FK_tbl_case_tbl_client");
             });
 
             modelBuilder.Entity<TblClient>(entity =>
