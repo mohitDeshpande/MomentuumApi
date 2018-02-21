@@ -52,13 +52,13 @@ namespace MomentuumApi.Controllers
         // GET: api/case/client/emp
         // getting all the cases with client details assigned to the Employee based on employeelogin
         [HttpGet("client/emp"), Authorize]
-        public IActionResult GetCaseClientByEmpJwt(string id)
+        public IActionResult GetCaseClientByEmpJwt()
         {
             var user = JwtHelper.GetUser(HttpContext.User.Claims);
 
             var clientCase = _context.TblCase
                 .Join(_context.TblClient, cas => cas.IdClient, cli => cli.Id, (cas, cli) => new { cas, cli })
-                .Where(x => x.cas.CaseAssignedTo == id)
+                .Where(x => x.cas.CaseAssignedTo == user)
                 .ToList();
 
             if (clientCase == null)
