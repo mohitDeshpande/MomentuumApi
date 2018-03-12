@@ -1,0 +1,105 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace MomentuumApi.Model.CivicTrack
+{
+    public partial class TblImport
+    {
+        public long RowId { get; set; }
+        public Guid? Id { get; set; }
+        public long? ImportHdrId { get; set; }
+        public string VoterId { get; set; }
+        public string VoterYd2 { get; set; }
+        public string Type { get; set; }
+        public string ClassDetails { get; set; }
+        public string Lastfirstname { get; set; }
+        public string Firstlastname { get; set; }
+        public string Status { get; set; }
+        public string Lastname { get; set; }
+        public string Suffix { get; set; }
+        public string FirstName { get; set; }
+        public string Salutation { get; set; }
+        public string Middlename { get; set; }
+        public string RuralAddress1 { get; set; }
+        public string RuralAddress2 { get; set; }
+        public string UnitNo { get; set; }
+        public string HouseNumber { get; set; }
+        public string StreetNumSfx { get; set; }
+        public string StreetName { get; set; }
+        public string StreetType { get; set; }
+        public string StreetDirection { get; set; }
+        public string HousenumberStreetnameType { get; set; }
+        public string HousenumberStreetnameApt { get; set; }
+        public string StreetnameType { get; set; }
+        public string Address { get; set; }
+        public string Occupation { get; set; }
+        public string Gender { get; set; }
+        public string City { get; set; }
+        public string CityStateZip { get; set; }
+        public string CityState { get; set; }
+        public string State { get; set; }
+        public string Zip { get; set; }
+        public string Riding { get; set; }
+        public string Poll { get; set; }
+        public string Seq { get; set; }
+        public string Homephonefull { get; set; }
+        public string HomeArea { get; set; }
+        public string HomePhone { get; set; }
+        public string Extension { get; set; }
+        public string Workphonefull { get; set; }
+        public string WorkArea { get; set; }
+        public string WorkPhone { get; set; }
+        public string Faxphonefull { get; set; }
+        public string FaxArea { get; set; }
+        public string FaxPhone { get; set; }
+        public string Email { get; set; }
+        public int? Score { get; set; }
+        public string SignedOut { get; set; }
+        public int? Complete { get; set; }
+        public string Cust1 { get; set; }
+        public string Cust2 { get; set; }
+        public string Cust3 { get; set; }
+        public string Signedoutdate { get; set; }
+        public string RuralCity { get; set; }
+        public string RuralState { get; set; }
+        public string Ruralzip { get; set; }
+        public string Cellphonefuill { get; set; }
+        public string Cellarea { get; set; }
+        public string Cellphone { get; set; }
+        public string Nickname { get; set; }
+        public string Lastbldgnum { get; set; }
+        public string Laststeetname { get; set; }
+        public string Lastzip { get; set; }
+        public bool? Dnc { get; set; }
+        public bool? Dnm { get; set; }
+        public bool? Dne { get; set; }
+        public string Tablename { get; set; }
+        public string Tablevalue { get; set; }
+        public string Importvalue { get; set; }
+        public string Newvalue { get; set; }
+        public string Label1 { get; set; }
+        public string Label2 { get; set; }
+        public string Label3 { get; set; }
+        public string Notesubject { get; set; }
+        public string Notedetail { get; set; }
+        public string Firstchoice { get; set; }
+        public string Issue { get; set; }
+        public string Signstatus { get; set; }
+        public string Donorstatus { get; set; }
+        public string Donoramount { get; set; }
+        public string Volstatus { get; set; }
+        public string Volactivity { get; set; }
+        public string Notecode { get; set; }
+        public string Notedescrip { get; set; }
+        public string Memberstatus { get; set; }
+        public string Memberdate { get; set; }
+        public string Email2 { get; set; }
+        public string Jobtitle { get; set; }
+        public string Department { get; set; }
+        public string Notes { get; set; }
+        public string PersonBusinessAddress { get; set; }
+        public int? Companyid { get; set; }
+        public string Website { get; set; }
+        public string Voterid3 { get; set; }
+    }
+}
