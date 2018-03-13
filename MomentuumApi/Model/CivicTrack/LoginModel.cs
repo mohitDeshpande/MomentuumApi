@@ -1,5 +1,5 @@
 ﻿using System;
-namespace MomentuumApi.Model
+namespace MomentuumApi.Model.CivicTrack
 {
     public class LoginModel
     {
