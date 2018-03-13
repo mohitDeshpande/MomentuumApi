@@ -6,7 +6,6 @@ namespace MomentuumApi.Model.CivicTrack
 
         public int EmployeeId { get; set; }
         public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
         public string EmployeeLogin { get; set; }
         public string EmployeeName { get; set; }
         public string EmailAddress { get; set; }
@@ -18,7 +17,7 @@ namespace MomentuumApi.Model.CivicTrack
         public string MobilePhone { get; set; }
         public string WorkPhone { get; set; }
         public string WorkPhoneExt { get; set; }
-        public string Division { get; set; }
+        public string Riding { get; set; }
     
         public TblEmployees()
         { }

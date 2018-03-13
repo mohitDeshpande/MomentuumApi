@@ -15,6 +15,7 @@ namespace MomentuumApi.Model.CivicTrack
         public virtual DbSet<TblRoundCase> TblRoundCase { get; set; }
         public virtual DbSet<TblRoundtablequeue> TblRoundtablequeue { get; set; }
         public virtual DbSet<TblVoter> TblVoter { get; set; }
+        public virtual DbSet<TblEmployees> TblEmployees { get; set; }
 
         public CivicTrackContext(DbContextOptions<CivicTrackContext> options) : base(options)
         { }
@@ -868,8 +869,8 @@ namespace MomentuumApi.Model.CivicTrack
 
                 entity.Property(e => e.Attemptcount).HasColumnName("attemptcount");
 
-                entity.Property(e => e.Division)
-                    .HasColumnName("division")
+                entity.Property(e => e.Riding)
+                    .HasColumnName("riding")
                     .HasMaxLength(10);
 
                 entity.Property(e => e.EmailAddress).HasMaxLength(100);
@@ -877,8 +878,6 @@ namespace MomentuumApi.Model.CivicTrack
                 entity.Property(e => e.EmployeeLogin).HasMaxLength(50);
 
                 entity.Property(e => e.EmployeeName).HasMaxLength(100);
-
-                entity.Property(e => e.EndDate).HasColumnType("datetime");
 
                 entity.Property(e => e.HomePhone).HasMaxLength(11);
 

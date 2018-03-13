@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using MomentuumApi.Model;
+using MomentuumApi.Model.CivicTrack;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,9 +20,9 @@ namespace MomentuumApi.Controllers
     {
 
         private IConfiguration _config;
-        private readonly MobileDBContext _context;
+        private readonly CivicTrackContext _context;
 
-        public AuthenticationController(IConfiguration config, MobileDBContext context) 
+        public AuthenticationController(IConfiguration config, CivicTrackContext context) 
         {
             _config = config;
             _context = context;
