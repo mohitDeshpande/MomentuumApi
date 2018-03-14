@@ -30,11 +30,10 @@ namespace MomentuumApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // var oldConnection = $"Server={Configuration["database:server"]},{Configuration["database:port"]};Database={Configuration["database:db"]};Trusted_Connection=False;uid={Configuration["database:uid"]};pwd={Configuration["database:pwd"]}";
-            //services.AddDbContext<MobileDBContext>(options => options.UseSqlServer(oldConnection));
+            var oldConnection = $"Server={Configuration["database:server"]},{Configuration["database:port"]};Database={Configuration["database:db"]};Trusted_Connection=False;uid={Configuration["database:uid"]};pwd={Configuration["database:pwd"]}";
+            services.AddDbContext<MobileDBContext>(options => options.UseSqlServer(oldConnection));
 
-            // var civicTrackConnection = $"Server={Configuration["database:server"]},{Configuration["database:port"]};Database={Configuration["database:civicTrackDb"]};Trusted_Connection=False;uid={Configuration["database:uid"]};pwd={Configuration["database:pwd"]}";
-            var civicTrackConnection= @"Data Source=DIVINEBRAD\SQLEXPRESS;Initial Catalog=VT;Integrated Security=True";
+            var civicTrackConnection = $"Server={Configuration["database:server"]},{Configuration["database:port"]};Database={Configuration["database:civicTrackDb"]};Trusted_Connection=False;uid={Configuration["database:uid"]};pwd={Configuration["database:pwd"]}";
             services.AddDbContext<CivicTrackContext>(options => options.UseSqlServer(civicTrackConnection));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

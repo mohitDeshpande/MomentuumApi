@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-
 namespace MomentuumApi.Model.CivicTrack
 {
     public partial class CivicTrackContext : DbContext
@@ -17,9 +16,6 @@ namespace MomentuumApi.Model.CivicTrack
         public virtual DbSet<TblRoundtablequeue> TblRoundtablequeue { get; set; }
         public virtual DbSet<TblVoter> TblVoter { get; set; }
         public virtual DbSet<TblEmployees> TblEmployees { get; set; }
-        public virtual DbSet<TblCase> TblCase { get; set; }
-        public virtual DbSet<TblCaseItem> TblCaseItem { get; set; }
-
 
         public CivicTrackContext(DbContextOptions<CivicTrackContext> options) : base(options)
         { }
@@ -182,136 +178,6 @@ namespace MomentuumApi.Model.CivicTrack
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //manual addition, due to lack of primary key 
-
-            modelBuilder.Entity<TblCase>(entity =>
-            {
-                entity.HasKey(e => e.Caseid);
-
-                entity.ToTable("tbl_case");
-
-                entity.Property(e => e.Caseid).HasColumnName("caseid");
-
-                entity.Property(e => e.CaseAssignedTo)
-                    .HasColumnName("caseAssignedTo")
-                    .HasMaxLength(50);
-
-               
-                entity.Property(e => e.CaseClosedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.CaseCode).HasMaxLength(50);
-
-                entity.Property(e => e.CaseNature).HasColumnName("caseNature");
-
-                entity.Property(e => e.CaseOpenDate)
-                    .HasColumnName("caseOpenDate")
-                    .HasColumnType("datetime");
-
-                entity.Property(e => e.CaseSource).HasMaxLength(25);
-
-                entity.Property(e => e.Casedescription)
-                    .HasColumnName("casedescription")
-                    .HasMaxLength(2000);
-
-                entity.Property(e => e.Casestatus)
-                    .HasColumnName("casestatus")
-                    .HasMaxLength(300);
-
-                entity.Property(e => e.Casetype)
-                    .HasColumnName("casetype")
-                    .HasMaxLength(25);
-
-                entity.Property(e => e.Createdby)
-                    .HasColumnName("createdby")
-                    .HasMaxLength(255);
-              
-
-               entity.Property(e => e.Deleted)
-                   .HasColumnName("deleted")
-                   .HasMaxLength(25);
-
-               entity.Property(e => e.IdClient).HasColumnName("id");
-               entity.Property(e => e.IdClient).HasColumnName("tempcaseid");
-               entity.Property(e => e.Timeprocess)
-                   .HasColumnName("timeprocess")
-                   .HasColumnType("datetime");
-                /* Not in new db
-             entity.Property(e => e.Createddate)
-                 .HasColumnName("createddate")
-                 .HasMaxLength(255)
-                 .HasDefaultValueSql("(getdate())");
-                 */
-
-                /* Not in new db
-                entity.Property(e => e.Updateddate)
-                    .HasColumnName("updateddate")
-                    .HasMaxLength(255)
-                    .HasDefaultValueSql("(getdate())");
-                    */
-               
-                entity.Property(e => e.Userid)
-                    .HasColumnName("userid")
-                    .HasMaxLength(25);
-                // new column
-                entity.Property(e => e.Subtype)
-                   .HasColumnName("subtype")
-                   .HasMaxLength(50);
-                //new column
-                entity.Property(e => e.Casein)
-                  .HasColumnName("casein")
-                  .HasMaxLength(20);
-
-
-                //entity.HasOne(d => d.IdNavigation)
-                //    .WithMany()
-                //    .HasForeignKey(d => d.IdClient)
-                //    .HasConstraintName("FK_tbl_case_tbl_client");
-            });
-
-            // Manual addition of Case Items due to lack of Primary Key on this table 
-
-            modelBuilder.Entity<TblCaseItem>(entity =>
-            {
-                entity.ToTable("tbl_caseitem");
-                entity.HasKey(e => e.IntId);
-
-                entity.Property(e => e.IntId).HasColumnName("intid");
-
-                entity.Property(e => e.Caseid).HasColumnName("caseid");
-                entity.Property(e => e.CaseItemDate).HasColumnName("caseitemdate").HasMaxLength(25);
-
-                entity.Property(e => e.CaseItemDescription).HasColumnName("caseitemdescription").HasMaxLength(150);
-
-                entity.Property(e => e.CaseItemStatus).HasColumnName("caseitemstatus").HasMaxLength(100);
-
-                entity.Property(e => e.CaseItemDetail).HasColumnName("caseitemdetail");
-
-                entity.Property(e => e.CaseItemAction).HasColumnName("caseitemaction").HasMaxLength(50);
-
-                entity.Property(e => e.CaseItemAssigned).HasColumnName("caseitemassigned").HasMaxLength(50);
-
-                entity.Property(e => e.CaseItemFollowUpdate).HasColumnName("caseitemfollowupdate").HasMaxLength(25);
-
-                entity.Property(e => e.Deleted).HasColumnName("deleted").HasMaxLength(25);
-
-                entity.Property(e => e.UserId).HasColumnName("userid").HasMaxLength(25);
-
-                /* not in new db
-                entity.Property(e => e.TimeProcess).HasColumnName("timeprocess").HasMaxLength(25);
-
-                entity.Property(e => e.Priority).HasColumnName("priority").HasMaxLength(50);
-
-                entity.Property(e => e.CreatedBy).HasColumnName("createdby").HasMaxLength(255);
-
-                entity.Property(e => e.CreatedDate).HasColumnName("createddate").HasMaxLength(255);
-
-                entity.Property(e => e.UpdatedDate).HasColumnName("updateddate").HasMaxLength(255);
-                */
-            });
-
-
-
-
             modelBuilder.Entity<Mail>(entity =>
             {
                 entity.HasKey(e => e.GcGuid);
