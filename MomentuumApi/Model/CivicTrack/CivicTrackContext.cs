@@ -197,7 +197,7 @@ namespace MomentuumApi.Model.CivicTrack
                     .HasMaxLength(50);
 
                
-                entity.Property(e => e.CaseClosedDate).HasColumnType("datetime");
+                entity.Property(e => e.CaseClosedDate).HasMaxLength(25);
 
                 entity.Property(e => e.CaseCode).HasMaxLength(50);
 
@@ -205,7 +205,7 @@ namespace MomentuumApi.Model.CivicTrack
 
                 entity.Property(e => e.CaseOpenDate)
                     .HasColumnName("caseOpenDate")
-                    .HasColumnType("datetime");
+                    .HasMaxLength(25);
 
                 entity.Property(e => e.CaseSource).HasMaxLength(25);
 
@@ -230,11 +230,11 @@ namespace MomentuumApi.Model.CivicTrack
                    .HasColumnName("deleted")
                    .HasMaxLength(25);
 
-               entity.Property(e => e.IdClient).HasColumnName("id");
-               entity.Property(e => e.IdClient).HasColumnName("tempcaseid");
-               entity.Property(e => e.Timeprocess)
-                   .HasColumnName("timeprocess")
-                   .HasColumnType("datetime");
+               entity.Property(e => e.IdVoter).HasColumnName("id");
+               entity.Property(e => e.TempCaseId).HasColumnName("tempcaseid");
+                entity.Property(e => e.Timeprocess)
+                    .HasColumnName("timeprocess")
+                     .HasMaxLength(25);
                 /* Not in new db
              entity.Property(e => e.Createddate)
                  .HasColumnName("createddate")
@@ -248,7 +248,7 @@ namespace MomentuumApi.Model.CivicTrack
                     .HasMaxLength(255)
                     .HasDefaultValueSql("(getdate())");
                     */
-               
+
                 entity.Property(e => e.Userid)
                     .HasColumnName("userid")
                     .HasMaxLength(25);
@@ -257,8 +257,8 @@ namespace MomentuumApi.Model.CivicTrack
                    .HasColumnName("subtype")
                    .HasMaxLength(50);
                 //new column
-                entity.Property(e => e.Casein)
-                  .HasColumnName("casein")
+                entity.Property(e => e.Casesin)
+                  .HasColumnName("casesin")
                   .HasMaxLength(20);
 
 

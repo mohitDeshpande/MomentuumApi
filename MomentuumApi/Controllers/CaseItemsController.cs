@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MomentuumApi.Model;
+using MomentuumApi.Model.CivicTrack;
 
 namespace MomentuumApi.Controllers
 {
@@ -14,9 +14,9 @@ namespace MomentuumApi.Controllers
     [Route("api/[controller]")]
     public class CaseItemsController : Controller
     {
-        private readonly MobileDBContext _context;
+        private readonly CivicTrackContext _context;
 
-        public CaseItemsController(MobileDBContext context)
+        public CaseItemsController(CivicTrackContext context)
         {
             _context = context;
         }

@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MomentuumApi.Utils;
-using MomentuumApi.Model;
+using MomentuumApi.Model.CivicTrack;
 
 namespace MomentuumApi.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
-        private readonly MobileDBContext _context;
+        private readonly CivicTrackContext _context;
 
-        public ValuesController(MobileDBContext context)
+        public ValuesController(CivicTrackContext context)
         {
             _context = context;
         }

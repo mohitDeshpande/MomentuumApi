@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MomentuumApi.Model;
+using MomentuumApi.Model.CivicTrack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using MomentuumApi.Utils;
@@ -15,15 +15,15 @@ namespace MomentuumApi.Controllers
     [Route("api/[controller]")]
     public class CaseController : Controller
     {
-        private readonly MobileDBContext _context;
+        private readonly CivicTrackContext _context;
 
-        public CaseController(MobileDBContext context)
+        public CaseController(CivicTrackContext context)
         {
             _context = context;
         }
 
         // GET: api/case
-        [HttpGet, Authorize]
+        [HttpGet, Authorize ]
         public IEnumerable<TblCase> GetAll()
         {
             return _context.TblCase.ToList();
@@ -55,9 +55,9 @@ namespace MomentuumApi.Controllers
         public IActionResult GetCaseClientByEmpJwt()
         {
             var user = JwtHelper.GetUser(HttpContext.User.Claims);
-
+           
             var clientCase = _context.TblCase
-                .Join(_context.TblClient, cas => cas.IdClient, cli => cli.Id, (cas, cli) => new { cas, cli })
+                .Join(_context.TblVoter, cas => cas.IdVoter, cli => cli.Id, (cas, cli) => new { cas, cli })
                 .Where(x => x.cas.CaseAssignedTo == user)
                 .ToList();
 
@@ -66,17 +66,17 @@ namespace MomentuumApi.Controllers
                 return NotFound();
             }
             return new ObjectResult(clientCase);
-        }
+        } 
 
 
         // GET: api/case/client/{id}
         // getting all the cases with client details by case id
-        [HttpGet("client/{id}"), Authorize]
+       [HttpGet("client/{id}"), Authorize]
         public IActionResult GetCaseClientById(int id)
         {
      
             var clientCase = _context.TblCase
-                .Join(_context.TblClient, cas => cas.IdClient, cli => cli.Id, (cas, cli) => new { cas, cli })
+                .Join(_context.TblVoter, cas => cas.IdVoter, cli => cli.Id, (cas, cli) => new { cas, cli })
                 .Where(x => x.cas.Caseid == id)
                 .ToList();
 
@@ -85,6 +85,6 @@ namespace MomentuumApi.Controllers
                 return NotFound();
             }
             return new ObjectResult(clientCase);
-        }
+        } 
     }
 }
