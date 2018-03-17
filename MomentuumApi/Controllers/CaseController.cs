@@ -85,6 +85,29 @@ namespace MomentuumApi.Controllers
                 return NotFound();
             }
             return new ObjectResult(clientCase);
-        } 
+        }
+
+        // DELETE: api/case/5  -- Soft Delete
+        [HttpDelete("{id}"), Authorize]
+        public async Task<IActionResult> DeleteTblCase([FromRoute] int? id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var tblCase = await _context.TblCase.SingleOrDefaultAsync(m => m.Caseid == id);
+            if (tblCase == null)
+            {
+                return NotFound();
+            }
+            // Soft delete by changing value
+            tblCase.Deleted = "true";
+            await _context.SaveChangesAsync();
+
+            return Ok(tblCase);
+        }
+
+
     }
 }
