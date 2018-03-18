@@ -29,6 +29,30 @@ namespace MomentuumApi.Controllers
             return _context.TblCase.Where(emp => emp.Deleted.Equals("false")).ToList();
         }
 
+        /// <summary>
+        /// Gets the counts of open, closed and total cases assigned to an employee
+        /// </summary>
+        /// <returns>The case counts for employee.</returns>
+        [HttpGet("stats"), Authorize]
+        public IActionResult GetCaseCountsForEmployee() 
+        {
+            var user = JwtHelper.GetUser(HttpContext.User.Claims);
+            var allCases = _context.TblCase
+                                   .Where(x => x.CaseAssignedTo == user);
+
+            var caseStats = new CaseStats();
+            
+            var closedCount = allCases.Where(x => x.Casestatus.Contains("Closed")).Count();
+            var openCount = allCases.Where(x => x.Casestatus.Contains("Open") || x.Casestatus.Contains("Awaiting Info")).Count();
+            var totalCount = allCases.Count();
+
+            caseStats.ClosedCount = closedCount;
+            caseStats.OpenCount = openCount;
+            caseStats.TotalCount = totalCount;
+
+            return new ObjectResult(caseStats);
+        }
+
 
         // GET api/case/{id}
         // getting the single case based on id
