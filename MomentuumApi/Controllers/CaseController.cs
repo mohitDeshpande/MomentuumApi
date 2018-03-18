@@ -77,7 +77,7 @@ namespace MomentuumApi.Controllers
      
             var clientCase = _context.TblCase
                 .Join(_context.TblVoter, cas => cas.IdVoter, cli => cli.Id, (cas, cli) => new { cas, cli })
-                .Where(x => x.cas.Caseid == id)
+                .Where(x => x.cas.Caseid == id && x.cas.Deleted != "true")
                 .ToList();
 
             if (clientCase == null)
