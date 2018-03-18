@@ -77,7 +77,7 @@ namespace MomentuumApi.Controllers
      
             var clientCase = _context.TblCase
                 .Join(_context.TblVoter, cas => cas.IdVoter, cli => cli.Id, (cas, cli) => new { cas, cli })
-                .Where(x => x.cas.Caseid == id)
+                .Where(x => x.cas.Caseid == id && x.cas.Deleted != "true")
                 .ToList();
 
             if (clientCase == null)
@@ -108,6 +108,45 @@ namespace MomentuumApi.Controllers
             return Ok(tblCase);
         }
 
+        // PUT: api/Case/5
+        [HttpPut("{id}"), Authorize]
+        public async Task<IActionResult> PutTblCase([FromRoute] int? id, [FromBody] TblCase tblCase)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (id != tblCase.Caseid)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(tblCase).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TblCaseExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        private bool TblCaseExists(int? id)
+        {
+            return _context.TblCase.Any(e => e.Caseid == id);
+        }
 
     }
 }
