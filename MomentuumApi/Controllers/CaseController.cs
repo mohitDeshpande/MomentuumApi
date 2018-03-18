@@ -26,7 +26,7 @@ namespace MomentuumApi.Controllers
         [HttpGet, Authorize ]
         public IEnumerable<TblCase> GetAll()
         {
-            return _context.TblCase.ToList();
+            return _context.TblCase.Where(emp => emp.Deleted.Equals("false")).ToList();
         }
 
 
@@ -35,7 +35,7 @@ namespace MomentuumApi.Controllers
         [HttpGet("{id}"), Authorize]
         public IEnumerable<TblCase> GetCaseById(int id)
         {
-            return _context.TblCase.Where(emp => emp.Caseid.Equals(id)).ToList();
+            return _context.TblCase.Where(emp => emp.Caseid.Equals(id) && emp.Deleted.Equals("false")).ToList();
         }
 
 
@@ -44,7 +44,7 @@ namespace MomentuumApi.Controllers
         [HttpGet("emp/{id}"), Authorize]
         public IEnumerable<TblCase> GetCaseByEmpId(string id)
         {
-            return _context.TblCase.Where(emp => emp.CaseAssignedTo.Equals(id)).ToList();
+            return _context.TblCase.Where(emp => emp.CaseAssignedTo.Equals(id) && emp.Deleted.Equals("false")).ToList();
         }
 
 
@@ -58,7 +58,7 @@ namespace MomentuumApi.Controllers
            
             var clientCase = _context.TblCase
                 .Join(_context.TblVoter, cas => cas.IdVoter, cli => cli.Id, (cas, cli) => new { cas, cli })
-                .Where(x => x.cas.CaseAssignedTo == user)
+                .Where(x => x.cas.CaseAssignedTo == user && x.cas.Deleted.Equals("false"))
                 .ToList();
 
             if (clientCase == null)
@@ -77,7 +77,7 @@ namespace MomentuumApi.Controllers
      
             var clientCase = _context.TblCase
                 .Join(_context.TblVoter, cas => cas.IdVoter, cli => cli.Id, (cas, cli) => new { cas, cli })
-                .Where(x => x.cas.Caseid == id)
+                .Where(x => x.cas.Caseid == id && x.cas.Deleted.Equals("false"))
                 .ToList();
 
             if (clientCase == null)
@@ -108,6 +108,45 @@ namespace MomentuumApi.Controllers
             return Ok(tblCase);
         }
 
+        // PUT: api/Case/5
+        [HttpPut("{id}"), Authorize]
+        public async Task<IActionResult> PutTblCase([FromRoute] int? id, [FromBody] TblCase tblCase)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (id != tblCase.Caseid)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(tblCase).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TblCaseExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        private bool TblCaseExists(int? id)
+        {
+            return _context.TblCase.Any(e => e.Caseid == id);
+        }
 
     }
 }
