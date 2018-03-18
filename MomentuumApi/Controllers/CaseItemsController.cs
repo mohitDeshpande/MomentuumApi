@@ -107,7 +107,7 @@ namespace MomentuumApi.Controllers
             return CreatedAtAction("GetTblCaseItem", new { id = tblCaseItem.IntId }, tblCaseItem);
         }
 
-        // DELETE: api/CaseItems/5
+        // DELETE: api/CaseItems/5  -- Soft Delete
         [HttpDelete("{id}"), Authorize]
         public async Task<IActionResult> DeleteTblCaseItem([FromRoute] int? id)
         {
@@ -121,8 +121,8 @@ namespace MomentuumApi.Controllers
             {
                 return NotFound();
             }
-
-            _context.TblCaseItem.Remove(tblCaseItem);
+            // Soft delete by changing value
+            tblCaseItem.Deleted = "true";
             await _context.SaveChangesAsync();
 
             return Ok(tblCaseItem);
