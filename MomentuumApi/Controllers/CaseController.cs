@@ -26,7 +26,7 @@ namespace MomentuumApi.Controllers
         [HttpGet, Authorize ]
         public IEnumerable<TblCase> GetAll()
         {
-            return _context.TblCase.ToList();
+            return _context.TblCase.Where(emp => emp.Deleted.Equals("false")).ToList();
         }
 
 
@@ -35,7 +35,7 @@ namespace MomentuumApi.Controllers
         [HttpGet("{id}"), Authorize]
         public IEnumerable<TblCase> GetCaseById(int id)
         {
-            return _context.TblCase.Where(emp => emp.Caseid.Equals(id)).ToList();
+            return _context.TblCase.Where(emp => emp.Caseid.Equals(id) && emp.Deleted.Equals("false")).ToList();
         }
 
 
@@ -44,7 +44,7 @@ namespace MomentuumApi.Controllers
         [HttpGet("emp/{id}"), Authorize]
         public IEnumerable<TblCase> GetCaseByEmpId(string id)
         {
-            return _context.TblCase.Where(emp => emp.CaseAssignedTo.Equals(id)).ToList();
+            return _context.TblCase.Where(emp => emp.CaseAssignedTo.Equals(id) && emp.Deleted.Equals("false")).ToList();
         }
 
 
@@ -58,7 +58,7 @@ namespace MomentuumApi.Controllers
            
             var clientCase = _context.TblCase
                 .Join(_context.TblVoter, cas => cas.IdVoter, cli => cli.Id, (cas, cli) => new { cas, cli })
-                .Where(x => x.cas.CaseAssignedTo == user)
+                .Where(x => x.cas.CaseAssignedTo == user && x.cas.Deleted.Equals("false"))
                 .ToList();
 
             if (clientCase == null)
@@ -77,7 +77,7 @@ namespace MomentuumApi.Controllers
      
             var clientCase = _context.TblCase
                 .Join(_context.TblVoter, cas => cas.IdVoter, cli => cli.Id, (cas, cli) => new { cas, cli })
-                .Where(x => x.cas.Caseid == id && x.cas.Deleted != "true")
+                .Where(x => x.cas.Caseid == id && x.cas.Deleted.Equals("false"))
                 .ToList();
 
             if (clientCase == null)
