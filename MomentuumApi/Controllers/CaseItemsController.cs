@@ -26,7 +26,7 @@ namespace MomentuumApi.Controllers
         [HttpGet, Authorize]
         public IEnumerable<TblCaseItem> GetTblCaseItemByCase([FromRoute] int? id)
         {
-            return _context.TblCaseItem.Where(i => i.Caseid.Equals(id));
+            return _context.TblCaseItem.Where(i => i.Caseid.Equals(id) && i.Deleted != "true");
         }
 
         // GET: api/CaseItems
@@ -47,7 +47,7 @@ namespace MomentuumApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var tblCaseItem = await _context.TblCaseItem.SingleOrDefaultAsync(m => m.IntId == id);
+            var tblCaseItem = await _context.TblCaseItem.SingleOrDefaultAsync(m => m.IntId == id && m.Deleted != "true");
 
             if (tblCaseItem == null)
             {
