@@ -7,7 +7,7 @@ namespace MomentuumApi.Model
     {
         public TblClient()
         {
-            TblCase = new HashSet<TblCase>();
+            //TblCase = new HashSet<TblCase>();
         }
 
         public int Id { get; set; }
@@ -60,6 +60,6 @@ namespace MomentuumApi.Model
         public DateTime? LastModifiedTimestamp { get; set; }
         public string Seq { get; set; }
 
-        public ICollection<TblCase> TblCase { get; set; }
+        //public ICollection<TblCase> TblCase { get; set; }
     }
 }

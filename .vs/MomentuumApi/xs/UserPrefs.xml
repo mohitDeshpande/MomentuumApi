@@ -1,0 +1,27 @@
+﻿<Properties StartupConfiguration="{DE50C57E-8340-4074-9AF7-4F8BD24143C9}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="MomentuumApi/Controllers/CaseController.cs">
+    <Files>
+      <File FileName="MomentuumApi/appsettings.Development.json" Line="14" Column="18" />
+      <File FileName="MomentuumApi/Startup.cs" Line="37" Column="52" />
+      <File FileName="MomentuumApi/MomentuumApi.csproj" Line="1" Column="1" />
+      <File FileName="MomentuumApi/Model/CivicTrack/CivicTrackContext.cs" Line="886" Column="45" />
+      <File FileName="MomentuumApi/Model/MobileDBContext.cs" Line="8" Column="26" />
+      <File FileName="MomentuumApi/Program.cs" Line="14" Column="6" />
+      <File FileName="MomentuumApi/Controllers/AuthenticationController.cs" Line="20" Column="6" />
+      <File FileName="MomentuumApi/Model/CivicTrack/LoginModel.cs" Line="1" Column="14" />
+      <File FileName="MomentuumApi/Model/CivicTrack/TblEmployees.cs" Line="9" Column="1" />
+      <File FileName="MomentuumApi/Controllers/EmployeeController.cs" Line="27" Column="10" />
+      <File FileName="MomentuumApi/Controllers/CaseController.cs" Line="33" Column="28" />
+      <File FileName="MomentuumApi/Controllers/CaseItemsController.cs" Line="1" Column="1" />
+      <File FileName="MomentuumApi/Utils/JwtHelper.cs" Line="12" Column="27" />
+      <File FileName="MomentuumApi/Model/CivicTrack/CaseStats.cs" Line="8" Column="45" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.MomentuumApi PreferredExecutionTarget="MonoDevelop.Default" />
+</Properties>

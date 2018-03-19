@@ -2,45 +2,175 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using MomentuumApi.Model.CivicTrack;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using MomentuumApi.Utils;
 
 namespace MomentuumApi.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     public class CaseController : Controller
     {
-        // GET: api/values
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly CivicTrackContext _context;
+
+        public CaseController(CivicTrackContext context)
         {
-            return new string[] { "value1", "value2" };
+            _context = context;
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        // GET: api/case
+        [HttpGet, Authorize ]
+        public IEnumerable<TblCase> GetAll()
         {
-            return "value";
+            return _context.TblCase.Where(emp => emp.Deleted.Equals("false")).ToList();
         }
 
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody]string value)
+        /// <summary>
+        /// Gets the counts of open, closed and total cases assigned to an employee
+        /// </summary>
+        /// <returns>The case counts for employee.</returns>
+        [HttpGet("stats"), Authorize]
+        public IActionResult GetCaseCountsForEmployee() 
         {
+            var user = JwtHelper.GetUser(HttpContext.User.Claims);
+            var allCases = _context.TblCase
+                                   .Where(x => x.CaseAssignedTo == user);
+
+            var caseStats = new CaseStats();
+            
+            var closedCount = allCases.Where(x => x.Casestatus.Contains("Closed")).Count();
+            var openCount = allCases.Where(x => x.Casestatus.Contains("Open") || x.Casestatus.Contains("Awaiting Info")).Count();
+            var totalCount = allCases.Count();
+
+            caseStats.ClosedCount = closedCount;
+            caseStats.OpenCount = openCount;
+            caseStats.TotalCount = totalCount;
+
+            return new ObjectResult(caseStats);
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+
+        // GET api/case/{id}
+        // getting the single case based on id
+        [HttpGet("{id}"), Authorize]
+        public IEnumerable<TblCase> GetCaseById(int id)
         {
+            return _context.TblCase.Where(emp => emp.Caseid.Equals(id) && emp.Deleted.Equals("false")).ToList();
         }
 
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+
+        // GET api/case/emp/{id}
+        // getting all the cases assigned to the Employee based on empployeelogin
+        [HttpGet("emp/{id}"), Authorize]
+        public IEnumerable<TblCase> GetCaseByEmpId(string id)
         {
+            return _context.TblCase.Where(emp => emp.CaseAssignedTo.Equals(id) && emp.Deleted.Equals("false")).ToList();
         }
+
+
+
+        // GET: api/case/client/emp
+        // getting all the cases with client details assigned to the Employee based on employeelogin
+        [HttpGet("client/emp"), Authorize]
+        public IActionResult GetCaseClientByEmpJwt()
+        {
+            var user = JwtHelper.GetUser(HttpContext.User.Claims);
+           
+            var clientCase = _context.TblCase
+                .Join(_context.TblVoter, cas => cas.IdVoter, cli => cli.Id, (cas, cli) => new { cas, cli })
+                .Where(x => x.cas.CaseAssignedTo == user && x.cas.Deleted.Equals("false"))
+                .ToList();
+
+            if (clientCase == null)
+            {
+                return NotFound();
+            }
+            return new ObjectResult(clientCase);
+        } 
+
+
+        // GET: api/case/client/{id}
+        // getting all the cases with client details by case id
+       [HttpGet("client/{id}"), Authorize]
+        public IActionResult GetCaseClientById(int id)
+        {
+     
+            var clientCase = _context.TblCase
+                .Join(_context.TblVoter, cas => cas.IdVoter, cli => cli.Id, (cas, cli) => new { cas, cli })
+                .Where(x => x.cas.Caseid == id && x.cas.Deleted.Equals("false"))
+                .ToList();
+
+            if (clientCase == null)
+            {
+                return NotFound();
+            }
+            return new ObjectResult(clientCase);
+        }
+
+        // DELETE: api/case/5  -- Soft Delete
+        [HttpDelete("{id}"), Authorize]
+        public async Task<IActionResult> DeleteTblCase([FromRoute] int? id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var tblCase = await _context.TblCase.SingleOrDefaultAsync(m => m.Caseid == id);
+            if (tblCase == null)
+            {
+                return NotFound();
+            }
+            // Soft delete by changing value
+            tblCase.Deleted = "true";
+            await _context.SaveChangesAsync();
+
+            return Ok(tblCase);
+        }
+
+        // PUT: api/Case/5
+        [HttpPut("{id}"), Authorize]
+        public async Task<IActionResult> PutTblCase([FromRoute] int? id, [FromBody] TblCase tblCase)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (id != tblCase.Caseid)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(tblCase).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TblCaseExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        private bool TblCaseExists(int? id)
+        {
+            return _context.TblCase.Any(e => e.Caseid == id);
+        }
+
     }
 }

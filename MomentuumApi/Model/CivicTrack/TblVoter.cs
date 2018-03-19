@@ -1,0 +1,99 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace MomentuumApi.Model.CivicTrack
+{
+    public partial class TblVoter
+    {
+        public int Id { get; set; }
+        public string VoterId { get; set; }
+        public string VoterId2 { get; set; }
+        public string VoterId3 { get; set; }
+        public string Type { get; set; }
+        public string Class { get; set; }
+        public string Status { get; set; }
+        public string Lastname { get; set; }
+        public string Suffix { get; set; }
+        public string FirstName { get; set; }
+        public string Salutation { get; set; }
+        public string Middlename { get; set; }
+        public string RuralAddress1 { get; set; }
+        public string RuralAddress2 { get; set; }
+        public string UnitNo { get; set; }
+        public string HouseNumber { get; set; }
+        public string StreetNumSfx { get; set; }
+        public string StreetName { get; set; }
+        public string StreetType { get; set; }
+        public string StreetDirection { get; set; }
+        public string Address { get; set; }
+        public string Occupation { get; set; }
+        public string Gender { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string Zip { get; set; }
+        public string Riding { get; set; }
+        public string Poll { get; set; }
+        public string Seq { get; set; }
+        public string HomeArea { get; set; }
+        public string HomePhone { get; set; }
+        public string Extension { get; set; }
+        public string WorkArea { get; set; }
+        public string WorkPhone { get; set; }
+        public string FaxArea { get; set; }
+        public string FaxPhone { get; set; }
+        public string Email { get; set; }
+        public int? Score { get; set; }
+        public string SignedOut { get; set; }
+        public int? Complete { get; set; }
+        public string Cust1 { get; set; }
+        public string Cust2 { get; set; }
+        public string Cust3 { get; set; }
+        public string Signedoutdate { get; set; }
+        public string RuralCity { get; set; }
+        public string RuralState { get; set; }
+        public string Ruralzip { get; set; }
+        public string Cellarea { get; set; }
+        public string Cellphone { get; set; }
+        public string Nickname { get; set; }
+        public string Lastbldgnum { get; set; }
+        public string Laststeetname { get; set; }
+        public string Lastzip { get; set; }
+        public bool? Dnc { get; set; }
+        public bool? Dnm { get; set; }
+        public bool? Dne { get; set; }
+        public string Jobtitle { get; set; }
+        public string Department { get; set; }
+        public string Email2 { get; set; }
+        public string Language { get; set; }
+        public string Sin { get; set; }
+        public string Dob { get; set; }
+        public string Matchid { get; set; }
+        public string Website { get; set; }
+        public string PersonBusinessAddress { get; set; }
+        public int? Companyid { get; set; }
+        public string Intstreetname { get; set; }
+        public string Intaptno { get; set; }
+        public string Intcity { get; set; }
+        public string Intprovince { get; set; }
+        public string Intpostalcode { get; set; }
+        public string Intstreetno { get; set; }
+        public string Intstreettype { get; set; }
+        public string Intdirection { get; set; }
+        public string Intcellcode { get; set; }
+        public string Intworkcode { get; set; }
+        public string Intfaxcode { get; set; }
+        public string Inthomecode { get; set; }
+        public string Intcellarea { get; set; }
+        public string Inthomearea { get; set; }
+        public string Intfaxarea { get; set; }
+        public string Intworkarea { get; set; }
+        public string Inthomephone { get; set; }
+        public string Intworkphone { get; set; }
+        public string Intfaxphone { get; set; }
+        public string Intcellphone { get; set; }
+        public string Intworkextension { get; set; }
+        public string Country { get; set; }
+        public string RoundCaseSubType { get; set; }
+        public string Ucinumber { get; set; }
+    }
+}
