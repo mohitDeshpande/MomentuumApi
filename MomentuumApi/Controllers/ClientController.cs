@@ -20,18 +20,18 @@ namespace MomentuumApi.Controllers
 			_context = context;
 		}
 
-		// GET: api/client/division/{id}
+		// GET: api/client/division/{key}
 		// getting all the client assigned to the division to which employee belongs
 		[HttpGet("division/{key}"), Authorize]
 		public IEnumerable<TblVoter> GetAll(string key)
 		{
-			//TblEmployees employee = _context.TblEmployees.FirstOrDefault(emp => emp.EmployeeLogin.Equals(login.Username));
 			var user = JwtHelper.GetUser(HttpContext.User.Claims);
 			string keyToCheck = key.ToLower();
 			var div = _context.TblEmployees.FirstOrDefault(empl => empl.EmployeeLogin.Equals(user)).Riding;
-			return _context.TblVoter
-				.Where(cli => cli.Riding.Equals(div)).ToList()
-				.Where(cli => cli.FirstName.ToLower().Contains(keyToCheck) || cli.Lastname.ToLower().Contains(keyToCheck));
+			
+			return _context.TblVoter.Where(vot => vot.Riding.Equals(div))
+				.Where(cli => cli.FirstName.ToLower().Contains(keyToCheck) || cli.Lastname.ToLower().Contains(keyToCheck))
+				.ToList();
 		}
 
 		// get null list if no key was sent
