@@ -37,10 +37,16 @@ namespace MomentuumApi.Controllers
 
             TblEmployees employee = _context.TblEmployees.FirstOrDefault(emp => emp.EmployeeLogin.Equals(login.Username));
 
-            if (employee != null && employee.UsrPassword.Equals(login.Password)) {
-                var tokenString = BuildToken(login);
+            if (employee != null && employee.UsrPassword.Equals(login.Password)) 
+            {
+                string loginId = employee.EmployeeLogin;
+                string password = employee.UsrPassword;
 
-                response = Ok(new { token = tokenString });
+                if (loginId.Equals(login.Username) && password.Equals(login.Password))
+                {
+                    var tokenString = BuildToken(login);
+                    response = Ok(new { token = tokenString });
+                }
             }
 
             return response;
