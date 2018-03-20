@@ -55,10 +55,10 @@ namespace MomentuumApi.Controllers
         public IActionResult GetCaseClientByEmpJwt()
         {
             var user = JwtHelper.GetUser(HttpContext.User.Claims);
-           
-            var clientCase = _context.TblCase
+			var clientCase = _context.TblCase
                 .Join(_context.TblVoter, cas => cas.IdVoter, cli => cli.Id, (cas, cli) => new { cas, cli })
                 .Where(x => x.cas.CaseAssignedTo == user && x.cas.Deleted.Equals("false"))
+				//.Include(caseS)
                 .ToList();
 
             if (clientCase == null)

@@ -31,7 +31,7 @@ namespace MomentuumApi.Controllers
 			
 			return _context.TblVoter.Where(vot => vot.Riding.Equals(div))
 				.Where(cli => cli.FirstName.ToLower().Contains(keyToCheck) || cli.Lastname.ToLower().Contains(keyToCheck))
-				.ToList();
+				.ToList().Take(15);
 		}
 
 		// get null list if no key was sent
