@@ -34,19 +34,15 @@ namespace MomentuumApi.Controllers
         public IActionResult Login([FromBody]LoginModel login)
         {
             IActionResult response = Unauthorized();
-
             TblEmployees employee = _context.TblEmployees.FirstOrDefault(emp => emp.EmployeeLogin.Equals(login.Username));
 
-            if (employee != null && employee.UsrPassword.Equals(login.Password)) 
-            {
-                string loginId = employee.EmployeeLogin;
-                string password = employee.UsrPassword;
+            string loginId = employee?.EmployeeLogin;
+            string password = employee?.UsrPassword;
 
-                if (loginId.Equals(login.Username) && password.Equals(login.Password))
-                {
-                    var tokenString = BuildToken(login);
-                    response = Ok(new { token = tokenString });
-                }
+            if (loginId.Equals(login.Username) && password.Equals(login.Password))
+            {
+                var tokenString = BuildToken(login);
+                response = Ok(new { token = tokenString });
             }
 
             return response;
