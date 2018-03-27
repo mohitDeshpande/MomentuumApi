@@ -20,11 +20,6 @@ namespace MomentuumApi.Controllers
             _context = context;
         }
 
-        // GET: api/case
-        [HttpGet, Authorize]
-        public IEnumerable<TblCaseType> GetTblCaseType()
-        {
-            return _context.TblCaseType.GroupBy(e => e.listtext).ToList();
-        }
+        
     }
 }

@@ -1,9 +1,13 @@
 {
   "iisSettings": {
-    "windowsAuthentication": false,
+    "windowsAuthentication": true,
     "anonymousAuthentication": true,
+    "iis": {
+      "applicationUrl": "http://localhost/MomentuumApi",
+      "sslPort": 0
+    },
     "iisExpress": {
-      "applicationUrl": "*:5000",
+      "applicationUrl": "http://localhost:5000",
       "sslPort": 0
     }
   },
@@ -23,7 +27,15 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "*:5000"
+      "applicationUrl": "http://localhost:5000"
+    },
+    "LinkApi": {
+      "commandName": "IIS",
+      "launchBrowser": true,
+      "launchUrl": "api/values",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
     }
   }
 }
