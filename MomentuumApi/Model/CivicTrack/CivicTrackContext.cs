@@ -7,6 +7,7 @@ namespace MomentuumApi.Model.CivicTrack
 {
     public partial class CivicTrackContext : DbContext
     {
+        public virtual DbSet<TblCaseType> TblCaseType { get; set; }
         public virtual DbSet<Mail> Mail { get; set; }
         public virtual DbSet<TblImport> TblImport { get; set; }
         public virtual DbSet<TblImportHdr> TblImportHdr { get; set; }
@@ -175,19 +176,39 @@ namespace MomentuumApi.Model.CivicTrack
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer(@"Server=127.0.0.1,1433;Database=VT;Trusted_Connection=False;uid=sa;pwd=password@123");
+                optionsBuilder.UseSqlServer(@"Server=127.0.0.1,1433;Database=VT;Trusted_Connection=True;");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //manual addition, due to lack of primary key 
+            modelBuilder.Entity<TblCaseType>(entity =>
+            {
+                entity.HasKey(e => e.id);
+
+                entity.ToTable("lst_casetype");
+
+                entity.Property(e => e.id).HasColumnName("id");
+
+                entity.Property(e => e.Code)
+                    .HasColumnName("code")
+                    .HasColumnType("nchar(5)");
+
+                entity.Property(e => e.listtext)
+                    .HasColumnName("listtext")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.refid).HasColumnName("refid");
+
+                entity.Property(e => e.score).HasColumnName("score");
+            });
+
 
             modelBuilder.Entity<TblCase>(entity =>
             {
                 entity.HasKey(e => e.Caseid);
-
+                
                 entity.ToTable("tbl_case");
 
                 entity.Property(e => e.Caseid).HasColumnName("caseid");
