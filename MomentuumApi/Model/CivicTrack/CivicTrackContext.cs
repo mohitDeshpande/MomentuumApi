@@ -19,8 +19,8 @@ namespace MomentuumApi.Model.CivicTrack
 		public virtual DbSet<TblEmployees> TblEmployees { get; set; }
 		public virtual DbSet<TblCase> TblCase { get; set; }
 		public virtual DbSet<TblCaseItem> TblCaseItem { get; set; }
-
-		public CivicTrackContext(DbContextOptions<CivicTrackContext> options) : base(options)
+        public virtual DbSet<TblFiles> TblFiles { get; set; }
+        public CivicTrackContext(DbContextOptions<CivicTrackContext> options) : base(options)
 		{ }
 
 		// Unable to generate entity type for table 'dbo.Lst_importfieldnames'. Please see the warning messages.
@@ -181,9 +181,28 @@ namespace MomentuumApi.Model.CivicTrack
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			//manual addition, due to lack of primary key 
+            //manual addition, due to lack of primary key
 
-			modelBuilder.Entity<TblCase>(entity =>
+            modelBuilder.Entity<TblFiles>(entity =>
+            {
+                entity.ToTable("tbl_files");
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.Riding).HasColumnName("riding").HasMaxLength(50);
+                entity.Property(e => e.CaseItemId).HasColumnName("caseitemid").HasMaxLength(50);
+                entity.Property(e => e.UserId).HasColumnName("userid").HasMaxLength(50);
+                entity.Property(e => e.FileName).HasColumnName("filename").HasMaxLength(1050);
+                entity.Property(e => e.TimeProcess).HasColumnName("timeprocess").HasMaxLength(50);
+                entity.Property(e => e.Deleted).HasColumnName("deleted").HasMaxLength(50);
+                entity.Property(e => e.Comments).HasColumnName("comments").HasMaxLength(1050);
+                entity.Property(e => e.VoterId).HasColumnName("voterid").HasMaxLength(50);
+
+            });
+
+
+            //manual addition, due to lack of primary key 
+
+            modelBuilder.Entity<TblCase>(entity =>
 			{
 				entity.HasKey(e => e.Caseid);
 
