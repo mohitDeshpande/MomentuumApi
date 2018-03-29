@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MomentuumApi.Model.CivicTrack;
 using Microsoft.AspNetCore.Authorization;
+using MomentuumApi.Utils;
 
 namespace MomentuumApi.Controllers
 {
@@ -29,15 +30,39 @@ namespace MomentuumApi.Controllers
         }
 
 
-        // GET: api/file/{id}
-        [Route("image/{id}")]
-        [HttpGet, Authorize]
+        // GET: api/file/image{id}
+        [Route("image/{id}"), Authorize]
+        [HttpGet]
         public async Task<IActionResult> GetImageFile([FromRoute] int? id)
         {
+            
+            
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var file = _context.TblFiles.Where(i => i.Id.Equals(id)).SingleOrDefault();
-            var image = System.IO.File.OpenRead(file.FileName);
-                      
-            return File(image, "image/jpeg");
+            if (file == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                try
+                {
+                    var image = System.IO.File.OpenRead(FileHelper.BasePath+file.FileName);
+                    return File(image, "image/jpeg");
+                }
+                catch (Exception ex)
+                {
+                    
+                    return NotFound();
+                }
+               
+            }
+            
+                
+            
         }
 
         // GET: api/File/5
