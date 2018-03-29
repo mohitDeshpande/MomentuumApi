@@ -31,8 +31,8 @@ namespace MomentuumApi.Controllers
 
 
         // GET: api/file/image{id}
-        [Route("image/{id}"), Authorize]
-        [HttpGet]
+        [Route("image/{id}")]
+        [HttpGet, Authorize]
         public async Task<IActionResult> GetImageFile([FromRoute] int? id)
         {
             
