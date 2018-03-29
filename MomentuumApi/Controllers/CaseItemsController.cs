@@ -23,7 +23,7 @@ namespace MomentuumApi.Controllers
 
         // GET: api/CaseItems/case/1234, in order to get case items for a specific case
         [Route("case/{id}")]
-        [HttpGet]
+        [HttpGet,Authorize]
         public IActionResult GetTblCaseItemByCase([FromRoute] int? id)
         {
 
