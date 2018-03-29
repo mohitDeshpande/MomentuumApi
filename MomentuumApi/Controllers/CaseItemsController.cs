@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MomentuumApi.Model.CivicTrack;
+using MomentuumApi.Utils;
 
 namespace MomentuumApi.Controllers
 {
@@ -120,6 +121,10 @@ namespace MomentuumApi.Controllers
             {
                 return BadRequest(ModelState);
             }
+
+            tblCaseItem.CaseItemDate = Convert.ToString(DateTime.Now);
+            tblCaseItem.Deleted = "false";
+            tblCaseItem.UserId = JwtHelper.GetUser(HttpContext.User.Claims);
 
             _context.TblCaseItem.Add(tblCaseItem);
             await _context.SaveChangesAsync();
