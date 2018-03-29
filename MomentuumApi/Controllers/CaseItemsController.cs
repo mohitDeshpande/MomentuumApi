@@ -23,10 +23,14 @@ namespace MomentuumApi.Controllers
 
         // GET: api/CaseItems/case/1234, in order to get case items for a specific case
         [Route("case/{id}")]
-        [HttpGet, Authorize]
-        public IEnumerable<TblCaseItem> GetTblCaseItemByCase([FromRoute] int? id)
+        [HttpGet]
+        public IActionResult GetTblCaseItemByCase([FromRoute] int? id)
         {
-            return _context.TblCaseItem.Where(i => i.Caseid.Equals(id) && i.Deleted.Equals("false"));
+
+            var result = _context.TblCaseItem.Where(i => i.Caseid.Equals(id) && i.Deleted.Equals("false"))
+                .GroupJoin(_context.TblFiles.Where(f => f.Deleted.Equals("false")), ci => Convert.ToString(ci.IntId),
+               fi => fi.CaseItemId, (ci, fi) => new { item = ci, file = fi.SingleOrDefault() });
+             return new ObjectResult(result);
         }
 
         // GET: api/CaseItems
