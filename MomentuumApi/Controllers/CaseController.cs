@@ -24,7 +24,7 @@ namespace MomentuumApi.Controllers
 
         // GET: api/case
         [HttpGet, Authorize ]
-        public IEnumerable<TblCase> GetAll()
+        public IEnumerable<TblCase> GetTblCase()
         {
             return _context.TblCase.Where(emp => emp.Deleted.Equals("false")).ToList();
         }
@@ -165,6 +165,21 @@ namespace MomentuumApi.Controllers
             }
 
             return NoContent();
+        }
+
+        // POST: api/Case
+        [HttpPost, Authorize]
+        public async Task<IActionResult> PostTblCase([FromBody] TblCase tblCase)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            _context.TblCase.Add(tblCase);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetTblCase", new { id = tblCase.Caseid }, tblCase);
         }
 
         private bool TblCaseExists(int? id)

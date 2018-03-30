@@ -32,7 +32,7 @@ namespace MomentuumApi.Controllers
 
         // GET: api/file/image{id}
         [Route("image/{id}")]
-        [HttpGet]
+        [HttpGet, Authorize]
         public async Task<IActionResult> GetImageFile([FromRoute] int? id)
         {
             
