@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,14 +10,15 @@ namespace MomentuumApi.Utils
 {
     public class FileHelper
     {
-        // Default 
-        private static string basePath= @"C:\Users\Bradley Blanchard\Documents\Brad\Humber\Semester 4\Capstone\Dev\MomentuumApi\MomentuumApiV4\MomentuumApi\Files\";
+        // Default Set in AppSettings 
        
+        private static string basePath;
 
         public static string BasePath
         {
             get { return basePath; }
-            
+            set {  basePath=value; }
+
         }
 
 

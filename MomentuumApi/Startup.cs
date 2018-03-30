@@ -15,6 +15,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MomentuumApi.Model;
 using MomentuumApi.Model.CivicTrack;
+using MomentuumApi.Utils;
 
 namespace MomentuumApi
 {
@@ -30,25 +31,28 @@ namespace MomentuumApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-			//var oldConnection = $"Server={Configuration["database:server"]},{Configuration["database:port"]};Database={Configuration["database:db"]};Trusted_Connection=False;uid={Configuration["database:uid"]};pwd={Configuration["database:pwd"]}";
-			//services.AddDbContext<MobileDBContext>(options => options.UseSqlServer(oldConnection));
-			var civicTrackConnection = $"Server={Configuration["database:server"]},{Configuration["database:port"]};Database={Configuration["database:civicTrackDb"]};Trusted_Connection=False;uid={Configuration["database:uid"]};pwd={Configuration["database:pwd"]}";
-             services.AddDbContext<CivicTrackContext>(options => options.UseSqlServer(civicTrackConnection));
+
+            FileHelper.BasePath=$"{Configuration["File:BasePath"]}";
+            //var oldConnection = $"Server={Configuration["database:server"]},{Configuration["database:port"]};Database={Configuration["database:db"]};Trusted_Connection=False;uid={Configuration["database:uid"]};pwd={Configuration["database:pwd"]}";
+           // services.AddDbContext<MobileDBContext>(options => options.UseSqlServer(oldConnection));
+
+            var civicTrackConnection = $"Server={Configuration["database:server"]},{Configuration["database:port"]};Database={Configuration["database:civicTrackDb"]};Trusted_Connection=False;uid={Configuration["database:uid"]};pwd={Configuration["database:pwd"]}";
+            services.AddDbContext<CivicTrackContext>(options => options.UseSqlServer(civicTrackConnection));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = Configuration["Jwt:Issuer"],
-                    ValidAudience = Configuration["Jwt:Issuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
-                };
-            });
+                    {
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = true,
+                            ValidateAudience = true,
+                            ValidateLifetime = true,
+                            ValidateIssuerSigningKey = true,
+                            ValidIssuer = Configuration["Jwt:Issuer"],
+                            ValidAudience = Configuration["Jwt:Issuer"],
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                        };
+                    });
 
             // Service to Enable SSL across the application
             //services.Configure<MvcOptions>(options =>
