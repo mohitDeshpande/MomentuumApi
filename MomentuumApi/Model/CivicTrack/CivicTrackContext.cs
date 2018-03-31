@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 namespace MomentuumApi.Model.CivicTrack
 {
 
-    public partial class TCivicTrackContext : DbContext
+    public partial class CivicTrackContext : DbContext
     {
         public virtual DbSet<Mail> Mail { get; set; }
         public virtual DbSet<TblImport> TblImport { get; set; }
