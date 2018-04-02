@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MomentuumApi.Model.CivicTrack;
+using MomentuumApi.Utils;
 
 namespace MomentuumApi.Controllers
 {
@@ -23,12 +24,27 @@ namespace MomentuumApi.Controllers
 
         // GET: api/CaseItems/case/1234, in order to get case items for a specific case
         [Route("case/{id}")]
-        [HttpGet, Authorize]
-        public IEnumerable<TblCaseItem> GetTblCaseItemByCase([FromRoute] int? id)
+        [HttpGet,Authorize]
+        public IActionResult GetTblCaseItemByCase([FromRoute] int? id)
         {
-            return _context.TblCaseItem.Where(i => i.Caseid.Equals(id) && i.Deleted.Equals("false"));
-        }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
+
+            var result = _context.TblCaseItem.Where(i => i.Caseid.Equals(id) && i.Deleted.Equals("false"))
+                .GroupJoin(_context.TblFiles.Where(f => f.Deleted.Equals("false")), ci => Convert.ToString(ci.IntId),
+               fi => fi.CaseItemId, (ci, fi) => new { item = ci, file = fi.SingleOrDefault() });
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
+       
         // GET: api/CaseItems
         [HttpGet, Authorize]
         public IEnumerable<TblCaseItem> GetTblCaseItem()
@@ -40,21 +56,26 @@ namespace MomentuumApi.Controllers
 
         // GET: api/CaseItems/5
         [HttpGet("{id}"), Authorize]
-        public async Task<IActionResult> GetTblCaseItem([FromRoute] int? id)
+        public IActionResult GetTblCaseItem([FromRoute] int? id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var tblCaseItem = await _context.TblCaseItem.SingleOrDefaultAsync(m => m.IntId == id && m.Deleted.Equals("false"));
+            //var tblCaseItem = await _context.TblCaseItem.SingleOrDefaultAsync(m => m.IntId == id && m.Deleted.Equals("false"));
+            var result =  _context.TblCaseItem.Where(i => i.IntId.Equals(id) && i.Deleted.Equals("false"))
+               .GroupJoin(_context.TblFiles.Where(f => f.Deleted.Equals("false")), ci => Convert.ToString(ci.IntId),
+              fi => fi.CaseItemId, (ci, fi) => new { item = ci, file = fi.SingleOrDefault() });
 
-            if (tblCaseItem == null)
+
+
+            if (result == null)
             {
                 return NotFound();
             }
 
-            return Ok(tblCaseItem);
+            return Ok(result);
         }
 
         // PUT: api/CaseItems/5
@@ -100,6 +121,10 @@ namespace MomentuumApi.Controllers
             {
                 return BadRequest(ModelState);
             }
+
+            tblCaseItem.CaseItemDate = Convert.ToString(DateTime.Now);
+            tblCaseItem.Deleted = "false";
+            tblCaseItem.UserId = JwtHelper.GetUser(HttpContext.User.Claims);
 
             _context.TblCaseItem.Add(tblCaseItem);
             await _context.SaveChangesAsync();

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -21,7 +21,7 @@ namespace MomentuumApi.Model.CivicTrack
         public virtual DbSet<TblEmployees> TblEmployees { get; set; }
         public virtual DbSet<TblCase> TblCase { get; set; }
         public virtual DbSet<TblCaseItem> TblCaseItem { get; set; }
-
+        public virtual DbSet<TblFiles> TblFiles { get; set; }
 
         public CivicTrackContext(DbContextOptions<CivicTrackContext> options) : base(options)
         { }
@@ -177,16 +177,34 @@ namespace MomentuumApi.Model.CivicTrack
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(@"Server=127.0.0.1,1433;Database=VT;Trusted_Connection=True;");
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseSqlServer(@"Server=127.0.0.1,1433;Database=VT;Trusted_Connection=False;uid=sa;pwd=password@123");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //manual addition, due to lack of primary key
+
+            modelBuilder.Entity<TblFiles>(entity =>
+            {
+                entity.ToTable("tbl_files");
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.Riding).HasColumnName("riding").HasMaxLength(50);
+                entity.Property(e => e.CaseItemId).HasColumnName("caseitemid").HasMaxLength(50);
+                entity.Property(e => e.UserId).HasColumnName("userid").HasMaxLength(50);
+                entity.Property(e => e.FileName).HasColumnName("filename").HasMaxLength(1050);
+                entity.Property(e => e.TimeProcess).HasColumnName("timeprocess").HasMaxLength(50);
+                entity.Property(e => e.Deleted).HasColumnName("deleted").HasMaxLength(50);
+                entity.Property(e => e.Comments).HasColumnName("comments").HasMaxLength(1050);
+                entity.Property(e => e.VoterId).HasColumnName("voterid").HasMaxLength(50);
+
+            });
             //manual addition, due to lack of primary key 
             modelBuilder.Entity<TblCaseType>(entity =>
             {
-                entity.HasKey(e => e.refid);
+                entity.HasKey(e => e.id);
 
                 entity.ToTable("lst_casetype");
 
@@ -292,8 +310,10 @@ namespace MomentuumApi.Model.CivicTrack
                     */
 
                 entity.Property(e => e.Userid)
+
                     .HasColumnName("userid")
                     .HasMaxLength(25);
+
                 // new column
                 entity.Property(e => e.Subtype)
                    .HasColumnName("subtype")
@@ -303,12 +323,13 @@ namespace MomentuumApi.Model.CivicTrack
                   .HasColumnName("casesin")
                   .HasMaxLength(20);
 
-
                 //entity.HasOne(d => d.IdNavigation)
                 //    .WithMany()
                 //    .HasForeignKey(d => d.IdClient)
                 //    .HasConstraintName("FK_tbl_case_tbl_client");
             });
+
+
 
             // Manual addition of Case Items due to lack of Primary Key on this table 
 
@@ -350,8 +371,6 @@ namespace MomentuumApi.Model.CivicTrack
                 entity.Property(e => e.UpdatedDate).HasColumnName("updateddate").HasMaxLength(255);
                 */
             });
-
-
 
 
             modelBuilder.Entity<Mail>(entity =>
