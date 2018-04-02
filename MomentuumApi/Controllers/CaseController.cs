@@ -23,8 +23,8 @@ namespace MomentuumApi.Controllers
         }
 
         // GET: api/case
-        [HttpGet, Authorize ]
-        public IEnumerable<TblCase> GetAll()
+        [HttpGet, Authorize]
+        public IEnumerable<TblCase> GetTblCase()
         {
             return _context.TblCase.Where(emp => emp.Deleted.Equals("false")).ToList();
         }
@@ -34,14 +34,14 @@ namespace MomentuumApi.Controllers
         /// </summary>
         /// <returns>The case counts for employee.</returns>
         [HttpGet("stats"), Authorize]
-        public IActionResult GetCaseCountsForEmployee() 
+        public IActionResult GetCaseCountsForEmployee()
         {
             var user = JwtHelper.GetUser(HttpContext.User.Claims);
             var allCases = _context.TblCase
                                    .Where(x => x.CaseAssignedTo == user);
 
             var caseStats = new CaseStats();
-            
+
             var closedCount = allCases.Where(x => x.Casestatus.Contains("Closed")).Count();
             var openCount = allCases.Where(x => x.Casestatus.Contains("Open") || x.Casestatus.Contains("Awaiting Info")).Count();
             var totalCount = allCases.Count();
@@ -51,6 +51,25 @@ namespace MomentuumApi.Controllers
             caseStats.TotalCount = totalCount;
 
             return new ObjectResult(caseStats);
+        }
+
+        [HttpGet("caseInfo"), Authorize]
+        public IActionResult GetCaseInfo()
+        {
+            var user = JwtHelper.GetUser(HttpContext.User.Claims);
+            var div = _context.TblEmployees.FirstOrDefault(empl => empl.EmployeeLogin.Equals(user)).Riding;
+
+            var caseInfo = new CaseInfo();
+
+            var caseType = _context.TblCaseType.Where(x => x.listtext != null && x.listtext != "" && x.id.Equals(div)).ToList();
+            var caseStatus = _context.TblCaseStatus.Where(x => x.listtext != null && x.listtext != "" && x.id.Equals(div)).Distinct().ToList();
+            var caseAssignedTo = _context.TblEmployees.Where(x => x.Riding.Equals(div)).ToList();
+
+            caseInfo.casetype = caseType;
+            caseInfo.casestatus = caseStatus;
+            caseInfo.caseassignedto = caseAssignedTo;
+
+            return new ObjectResult(caseInfo);
         }
 
 
@@ -79,7 +98,7 @@ namespace MomentuumApi.Controllers
         public IActionResult GetCaseClientByEmpJwt()
         {
             var user = JwtHelper.GetUser(HttpContext.User.Claims);
-			var clientCase = _context.TblCase
+            var clientCase = _context.TblCase
                 .Join(_context.TblVoter, cas => cas.IdVoter, cli => cli.Id, (cas, cli) => new { cas, cli })
                 .Where(x => x.cas.CaseAssignedTo == user && x.cas.Deleted.Equals("false"))
 
@@ -90,25 +109,39 @@ namespace MomentuumApi.Controllers
                 return NotFound();
             }
             return new ObjectResult(clientCase);
-        } 
+        }
 
 
         // GET: api/case/client/{id}
         // getting all the cases with client details by case id
-       [HttpGet("client/{id}"), Authorize]
+        [HttpGet("client/{id}"), Authorize]
         public IActionResult GetCaseClientById(int id)
         {
-     
+
+            var user = JwtHelper.GetUser(HttpContext.User.Claims);
+            var div = _context.TblEmployees.FirstOrDefault(empl => empl.EmployeeLogin.Equals(user)).Riding;
+
+            var caseInfo = new CaseInfo();
+
             var clientCase = _context.TblCase
                 .Join(_context.TblVoter, cas => cas.IdVoter, cli => cli.Id, (cas, cli) => new { cas, cli })
-                .Where(x => x.cas.Caseid == id && x.cas.Deleted.Equals("false"))
-                .ToList();
+                .FirstOrDefault(x => x.cas.Caseid == id && x.cas.Deleted.Equals("false"));
+
+            var caseType = _context.TblCaseType.Where(x => x.listtext != null && x.listtext != "" && x.id.Equals(div)).Distinct().ToList();
+            var caseStatus = _context.TblCaseStatus.Where(x => x.listtext != null && x.listtext != "" && x.id.Equals(div)).Distinct().ToList();
+            var caseAssignedTo = _context.TblEmployees.Where(x => x.Riding.Equals(div)).ToList();
+
+            caseInfo.casedetails = clientCase;
+            caseInfo.casetype = caseType;
+            caseInfo.casestatus = caseStatus;
+            caseInfo.caseassignedto = caseAssignedTo;
 
             if (clientCase == null)
             {
                 return NotFound();
             }
-            return new ObjectResult(clientCase);
+
+            return new ObjectResult(caseInfo);
         }
 
         // DELETE: api/case/5  -- Soft Delete
@@ -165,6 +198,21 @@ namespace MomentuumApi.Controllers
             }
 
             return NoContent();
+        }
+
+        // POST: api/Case
+        [HttpPost, Authorize]
+        public async Task<IActionResult> PostTblCase([FromBody] TblCase tblCase)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            _context.TblCase.Add(tblCase);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetTblCase", new { id = tblCase.Caseid }, tblCase);
         }
 
         private bool TblCaseExists(int? id)
