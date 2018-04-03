@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace MomentuumApi.Model.CivicTrack
 {
-
     public partial class CivicTrackContext : DbContext
     {
         public virtual DbSet<TblCaseType> TblCaseType { get; set; }
@@ -176,12 +175,11 @@ namespace MomentuumApi.Model.CivicTrack
         // Unable to generate entity type for table 'dbo.lst_editlist'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.tbl_mpusers'. Please see the warning messages.
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer(@"Server=127.0.0.1,1433;Database=VT;Trusted_Connection=False;uid=sa;pwd=password@123");
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		{
+			if (!optionsBuilder.IsConfigured)
+			{
+				optionsBuilder.UseSqlServer(@"Server=127.0.0.1,1433;Database=VT;Trusted_Connection=False;uid=sa;pwd=password@123");
             }
         }
 
@@ -396,11 +394,11 @@ namespace MomentuumApi.Model.CivicTrack
                 */
 
 			});
+
 			modelBuilder.Entity<SignatureCapture>(entity =>
 			{
 				entity.ToTable("signatureCapture");
 				entity.HasKey(e => e.Sign_id);
-
 				entity.Property(e => e.Sign_id).HasColumnName("Sign_id");
 				entity.Property(e => e.Case_id).HasColumnName("Case_id");
 				entity.Property(e => e.SignatureData).HasColumnName("SignatureData");
