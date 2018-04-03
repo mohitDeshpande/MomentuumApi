@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace MomentuumApi.Model.CivicTrack
 {
+
     public partial class CivicTrackContext : DbContext
     {
         public virtual DbSet<TblCaseType> TblCaseType { get; set; }
@@ -23,8 +24,9 @@ namespace MomentuumApi.Model.CivicTrack
         public virtual DbSet<TblCase> TblCase { get; set; }
         public virtual DbSet<TblCaseItem> TblCaseItem { get; set; }
         public virtual DbSet<TblFiles> TblFiles { get; set; }
+		public virtual DbSet<SignatureCapture> SignatureCapture { get; set; }
 
-        public CivicTrackContext(DbContextOptions<CivicTrackContext> options) : base(options)
+		public CivicTrackContext(DbContextOptions<CivicTrackContext> options) : base(options)
         { }
 
         // Unable to generate entity type for table 'dbo.Lst_importfieldnames'. Please see the warning messages.
@@ -392,7 +394,19 @@ namespace MomentuumApi.Model.CivicTrack
 
                 entity.Property(e => e.UpdatedDate).HasColumnName("updateddate").HasMaxLength(255);
                 */
-            });
+
+			});
+			modelBuilder.Entity<SignatureCapture>(entity =>
+			{
+				entity.ToTable("signatureCapture");
+				entity.HasKey(e => e.Sign_id);
+
+				entity.Property(e => e.Sign_id).HasColumnName("Sign_id");
+				entity.Property(e => e.Case_id).HasColumnName("Case_id");
+				entity.Property(e => e.SignatureData).HasColumnName("SignatureData");
+				
+			});
+
 
 
             modelBuilder.Entity<Mail>(entity =>

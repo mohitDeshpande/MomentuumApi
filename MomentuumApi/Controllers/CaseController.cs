@@ -101,8 +101,9 @@ namespace MomentuumApi.Controllers
             var clientCase = _context.TblCase
                 .Join(_context.TblVoter, cas => cas.IdVoter, cli => cli.Id, (cas, cli) => new { cas, cli })
                 .Where(x => x.cas.CaseAssignedTo == user && x.cas.Deleted.Equals("false"))
+				.Where(x => x.cas.CaseAssignedTo == user && !x.cas.Casestatus.Equals("Closed"))
 
-                .ToList();
+				.ToList();
 
             if (clientCase == null)
             {
@@ -110,7 +111,6 @@ namespace MomentuumApi.Controllers
             }
             return new ObjectResult(clientCase);
         }
-
 
         // GET: api/case/client/{id}
         // getting all the cases with client details by case id
@@ -191,8 +191,24 @@ namespace MomentuumApi.Controllers
             return Ok(tblCase);
         }
 
-        // PUT: api/Case/5
-        [HttpPut("{id}"), Authorize]
+		[HttpPost("signature"), Authorize]
+		public async Task<IActionResult> AddSignatureAsync([FromBody]SignatureCapture sign)
+		{
+			try
+			{
+				_context.SignatureCapture.Add(sign);
+				await _context.SaveChangesAsync();
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex);
+				throw ex;
+			}
+
+			return Ok();
+		}
+		// PUT: api/Case/5
+		[HttpPut("{id}"), Authorize]
         public async Task<IActionResult> PutTblCase([FromRoute] int? id, [FromBody] TblCase tblCase)
         {
             if (!ModelState.IsValid)
