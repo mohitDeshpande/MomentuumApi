@@ -9,6 +9,7 @@ namespace MomentuumApi.Model.CivicTrack
     {
         public List<TblCaseType> casetype { get; set; }
         public List<TblCaseStatus> casestatus { get; set; }
+        public List<TblCaseCode> casecode { get; set; }
         public List<TblEmployees> caseassignedto { get; set; }
         public Object casedetails { get; set; }
     }

@@ -127,10 +127,12 @@ namespace MomentuumApi.Controllers
                 .Join(_context.TblVoter, cas => cas.IdVoter, cli => cli.Id, (cas, cli) => new { cas, cli })
                 .FirstOrDefault(x => x.cas.Caseid == id && x.cas.Deleted.Equals("false"));
 
+            var caseCode = _context.TblCaseCode.Where(x => x.listtext != null && x.listtext != "" && x.id.Equals(div)).Distinct().ToList();
             var caseType = _context.TblCaseType.Where(x => x.listtext != null && x.listtext != "" && x.id.Equals(div)).Distinct().ToList();
             var caseStatus = _context.TblCaseStatus.Where(x => x.listtext != null && x.listtext != "" && x.id.Equals(div)).Distinct().ToList();
             var caseAssignedTo = _context.TblEmployees.Where(x => x.Riding.Equals(div)).ToList();
 
+            caseInfo.casecode = caseCode;
             caseInfo.casedetails = clientCase;
             caseInfo.casetype = caseType;
             caseInfo.casestatus = caseStatus;
@@ -140,6 +142,30 @@ namespace MomentuumApi.Controllers
             {
                 return NotFound();
             }
+
+            return new ObjectResult(caseInfo);
+        }
+
+        // GET: api/case/dropdowns
+        // getting all the cases with client details by case id
+        [HttpGet("dropdowns"), Authorize]
+        public IActionResult GetCaseDropdowns()
+        {
+
+            var user = JwtHelper.GetUser(HttpContext.User.Claims);
+            var div = _context.TblEmployees.FirstOrDefault(empl => empl.EmployeeLogin.Equals(user)).Riding;
+
+            var caseInfo = new CaseInfo();
+
+            var caseCode = _context.TblCaseCode.Where(x => x.listtext != null && x.listtext != "" && x.id.Equals(div)).Distinct().ToList();
+            var caseType = _context.TblCaseType.Where(x => x.listtext != null && x.listtext != "" && x.id.Equals(div)).Distinct().ToList();
+            var caseStatus = _context.TblCaseStatus.Where(x => x.listtext != null && x.listtext != "" && x.id.Equals(div)).Distinct().ToList();
+            var caseAssignedTo = _context.TblEmployees.Where(x => x.Riding.Equals(div)).ToList();
+
+            caseInfo.casecode = caseCode;
+            caseInfo.casetype = caseType;
+            caseInfo.casestatus = caseStatus;
+            caseInfo.caseassignedto = caseAssignedTo;
 
             return new ObjectResult(caseInfo);
         }

@@ -9,6 +9,7 @@ namespace MomentuumApi.Model.CivicTrack
     {
         public virtual DbSet<TblCaseType> TblCaseType { get; set; }
         public virtual DbSet<TblCaseStatus> TblCaseStatus { get; set; }
+        public virtual DbSet<TblCaseCode> TblCaseCode { get; set; }
         public virtual DbSet<Mail> Mail { get; set; }
         public virtual DbSet<TblImport> TblImport { get; set; }
         public virtual DbSet<TblImportHdr> TblImportHdr { get; set; }
@@ -204,7 +205,7 @@ namespace MomentuumApi.Model.CivicTrack
             //manual addition, due to lack of primary key 
             modelBuilder.Entity<TblCaseType>(entity =>
             {
-                entity.HasKey(e => e.id);
+                entity.HasKey(e => e.refid);
 
                 entity.ToTable("lst_casetype");
 
@@ -228,6 +229,27 @@ namespace MomentuumApi.Model.CivicTrack
                 entity.HasKey(e => e.refid);
 
                 entity.ToTable("lst_status");
+
+                entity.Property(e => e.id).HasColumnName("id");
+
+                entity.Property(e => e.Code)
+                    .HasColumnName("code")
+                    .HasColumnType("nchar(5)");
+
+                entity.Property(e => e.listtext)
+                    .HasColumnName("listtext")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.refid).HasColumnName("refid");
+
+                entity.Property(e => e.score).HasColumnName("score");
+            });
+
+            modelBuilder.Entity<TblCaseCode>(entity =>
+            {
+                entity.HasKey(e => e.refid);
+
+                entity.ToTable("lst_casecode");
 
                 entity.Property(e => e.id).HasColumnName("id");
 
