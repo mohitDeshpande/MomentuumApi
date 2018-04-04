@@ -5,9 +5,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace MomentuumApi.Model.CivicTrack
 {
-
     public partial class CivicTrackContext : DbContext
     {
+        public virtual DbSet<TblCaseType> TblCaseType { get; set; }
+        public virtual DbSet<TblCaseStatus> TblCaseStatus { get; set; }
+        public virtual DbSet<TblCaseCode> TblCaseCode { get; set; }
         public virtual DbSet<Mail> Mail { get; set; }
         public virtual DbSet<TblImport> TblImport { get; set; }
         public virtual DbSet<TblImportHdr> TblImportHdr { get; set; }
@@ -21,6 +23,7 @@ namespace MomentuumApi.Model.CivicTrack
         public virtual DbSet<TblCase> TblCase { get; set; }
         public virtual DbSet<TblCaseItem> TblCaseItem { get; set; }
         public virtual DbSet<TblFiles> TblFiles { get; set; }
+
         public CivicTrackContext(DbContextOptions<CivicTrackContext> options) : base(options)
         { }
 
@@ -202,7 +205,7 @@ namespace MomentuumApi.Model.CivicTrack
             //manual addition, due to lack of primary key 
             modelBuilder.Entity<TblCaseType>(entity =>
             {
-                entity.HasKey(e => e.id);
+                entity.HasKey(e => e.refid);
 
                 entity.ToTable("lst_casetype");
 
@@ -221,8 +224,47 @@ namespace MomentuumApi.Model.CivicTrack
                 entity.Property(e => e.score).HasColumnName("score");
             });
 
+            modelBuilder.Entity<TblCaseStatus>(entity =>
+            {
+                entity.HasKey(e => e.refid);
 
-            //manual addition, due to lack of primary key 
+                entity.ToTable("lst_status");
+
+                entity.Property(e => e.id).HasColumnName("id");
+
+                entity.Property(e => e.Code)
+                    .HasColumnName("code")
+                    .HasColumnType("nchar(5)");
+
+                entity.Property(e => e.listtext)
+                    .HasColumnName("listtext")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.refid).HasColumnName("refid");
+
+                entity.Property(e => e.score).HasColumnName("score");
+            });
+
+            modelBuilder.Entity<TblCaseCode>(entity =>
+            {
+                entity.HasKey(e => e.refid);
+
+                entity.ToTable("lst_casecode");
+
+                entity.Property(e => e.id).HasColumnName("id");
+
+                entity.Property(e => e.Code)
+                    .HasColumnName("code")
+                    .HasColumnType("nchar(5)");
+
+                entity.Property(e => e.listtext)
+                    .HasColumnName("listtext")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.refid).HasColumnName("refid");
+
+                entity.Property(e => e.score).HasColumnName("score");
+            });
 
             modelBuilder.Entity<TblCase>(entity =>
             {
@@ -282,7 +324,6 @@ namespace MomentuumApi.Model.CivicTrack
                  .HasDefaultValueSql("(getdate())");
                  */
 
-
                 /* Not in new db
                 entity.Property(e => e.Updateddate)
                     .HasColumnName("updateddate")
@@ -291,8 +332,10 @@ namespace MomentuumApi.Model.CivicTrack
                     */
 
                 entity.Property(e => e.Userid)
-                   .HasColumnName("userid")
-                   .HasMaxLength(25);
+
+                    .HasColumnName("userid")
+                    .HasMaxLength(25);
+
                 // new column
                 entity.Property(e => e.Subtype)
                    .HasColumnName("subtype")
@@ -302,13 +345,11 @@ namespace MomentuumApi.Model.CivicTrack
                   .HasColumnName("casesin")
                   .HasMaxLength(20);
 
-
                 //entity.HasOne(d => d.IdNavigation)
                 //    .WithMany()
                 //    .HasForeignKey(d => d.IdClient)
                 //    .HasConstraintName("FK_tbl_case_tbl_client");
             });
-
 
 
 
@@ -352,8 +393,6 @@ namespace MomentuumApi.Model.CivicTrack
                 entity.Property(e => e.UpdatedDate).HasColumnName("updateddate").HasMaxLength(255);
                 */
             });
-
-
 
 
             modelBuilder.Entity<Mail>(entity =>
