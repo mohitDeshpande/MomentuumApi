@@ -183,9 +183,9 @@ namespace MomentuumApi.Model.CivicTrack
             }
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            //manual addition, due to lack of primary key
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			//manual addition, due to lack of primary key
 
             modelBuilder.Entity<TblFiles>(entity =>
             {

@@ -112,7 +112,6 @@ namespace MomentuumApi.Controllers
             return new ObjectResult(clientCase);
         }
 
-<<<<<<< HEAD
         // GET: api/case/client/{id}
         // getting all the cases with client details by case id
         [HttpGet("client/{id}"), Authorize]
@@ -170,9 +169,6 @@ namespace MomentuumApi.Controllers
 
             return new ObjectResult(caseInfo);
         }
-=======
-        
->>>>>>> fixed displaying closed cases + signature capture fully done in the backend
 
         // DELETE: api/case/5  -- Soft Delete
         [HttpDelete("{id}"), Authorize]
