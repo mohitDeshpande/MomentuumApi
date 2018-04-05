@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MomentuumApi.Model.CivicTrack
 {
-    public class TblCaseType
+    public class TblCaseCode
     {
         public String id { get; set; }
         public String listtext { get; set; }
