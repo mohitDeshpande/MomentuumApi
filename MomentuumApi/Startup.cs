@@ -33,13 +33,14 @@ namespace MomentuumApi
         {
 
             FileHelper.BasePath=$"{Configuration["File:BasePath"]}";
-            //var oldConnection = $"Server={Configuration["database:server"]},{Configuration["database:port"]};Database={Configuration["database:db"]};Trusted_Connection=False;uid={Configuration["database:uid"]};pwd={Configuration["database:pwd"]}";
-           // services.AddDbContext<MobileDBContext>(options => options.UseSqlServer(oldConnection));
 
-            var civicTrackConnection = $"Server={Configuration["database:server"]},{Configuration["database:port"]};Database={Configuration["database:civicTrackDb"]};Trusted_Connection=False;uid={Configuration["database:uid"]};pwd={Configuration["database:pwd"]}";
+			//var oldConnection = $"Server={Configuration["database:server"]},{Configuration["database:port"]};Database={Configuration["database:db"]};Trusted_Connection=False;uid={Configuration["database:uid"]};pwd={Configuration["database:pwd"]}";//var civicTrackConnection = @"Server=.\SQLEXPRESS01;Database=VT;Trusted_Connection=True;";
+			//services.AddDbContext<MobileDBContext>(options => options.UseSqlServer(oldConnection));
+
+			var civicTrackConnection = $"Server={Configuration["database:server"]},{Configuration["database:port"]};Database={Configuration["database:civicTrackDb"]};Trusted_Connection=False;uid={Configuration["database:uid"]};pwd={Configuration["database:pwd"]}";
             services.AddDbContext<CivicTrackContext>(options => options.UseSqlServer(civicTrackConnection));
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+			services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
                     {
                         options.TokenValidationParameters = new TokenValidationParameters

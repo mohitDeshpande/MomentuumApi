@@ -23,8 +23,9 @@ namespace MomentuumApi.Model.CivicTrack
         public virtual DbSet<TblCase> TblCase { get; set; }
         public virtual DbSet<TblCaseItem> TblCaseItem { get; set; }
         public virtual DbSet<TblFiles> TblFiles { get; set; }
+		public virtual DbSet<SignatureCapture> SignatureCapture { get; set; }
 
-        public CivicTrackContext(DbContextOptions<CivicTrackContext> options) : base(options)
+		public CivicTrackContext(DbContextOptions<CivicTrackContext> options) : base(options)
         { }
 
         // Unable to generate entity type for table 'dbo.Lst_importfieldnames'. Please see the warning messages.
@@ -174,18 +175,17 @@ namespace MomentuumApi.Model.CivicTrack
         // Unable to generate entity type for table 'dbo.lst_editlist'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.tbl_mpusers'. Please see the warning messages.
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer(@"Server=127.0.0.1,1433;Database=VT;Trusted_Connection=False;uid=sa;pwd=password@123");
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		{
+			if (!optionsBuilder.IsConfigured)
+			{
+				optionsBuilder.UseSqlServer(@"Server=127.0.0.1,1433;Database=VT;Trusted_Connection=False;uid=sa;pwd=password@123");
             }
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            //manual addition, due to lack of primary key
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			//manual addition, due to lack of primary key
 
             modelBuilder.Entity<TblFiles>(entity =>
             {
@@ -392,7 +392,19 @@ namespace MomentuumApi.Model.CivicTrack
 
                 entity.Property(e => e.UpdatedDate).HasColumnName("updateddate").HasMaxLength(255);
                 */
-            });
+
+			});
+
+			modelBuilder.Entity<SignatureCapture>(entity =>
+			{
+				entity.ToTable("signatureCapture");
+				entity.HasKey(e => e.Sign_id);
+				entity.Property(e => e.Sign_id).HasColumnName("Sign_id");
+				entity.Property(e => e.Case_id).HasColumnName("Case_id");
+				entity.Property(e => e.SignatureData).HasColumnName("SignatureData");
+				
+			});
+
 
 
             modelBuilder.Entity<Mail>(entity =>
