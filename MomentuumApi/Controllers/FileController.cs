@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using MomentuumApi.Model.CivicTrack;
 using Microsoft.AspNetCore.Authorization;
 using MomentuumApi.Utils;
+using System.IO;
 
 namespace MomentuumApi.Controllers
 {
@@ -33,36 +34,76 @@ namespace MomentuumApi.Controllers
         // GET: api/file/image{id}
         [Route("image/{id}")]
         [HttpGet, Authorize]
-        public async Task<IActionResult> GetImageFile([FromRoute] int? id)
+        public  IActionResult GetImageFile([FromRoute] int? id)
         {
             
-            
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var file = _context.TblFiles.Where(i => i.Id.Equals(id)).SingleOrDefault();
-            if (file == null)
+            if (FileHelper.FromDB == true)
             {
-                return NotFound();
+                var file = _context.TblFileStore.Where(i => i.Id.Equals(id)).SingleOrDefault();
+
+                if (file == null)
+                {
+                    return NotFound();
+                }
+
+
+                else
+                {
+                    try
+                    {
+
+                        Byte[] imgBytes = file.File;
+                        
+                        if (imgBytes != null)
+                        {
+                            MemoryStream ms = new MemoryStream(imgBytes);
+                            return new FileStreamResult(ms, file.FileType);
+                        }
+
+                        
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                        return NotFound();
+                    }
+
+                }
             }
             else
             {
-                try
+                var file = _context.TblFiles.Where(i => i.Id.Equals(id)).SingleOrDefault();
+
+
+                if (file == null)
                 {
-                    var image = System.IO.File.OpenRead(FileHelper.BasePath+file.FileName);
-                    return File(image, "image/jpeg");
-                }
-                catch (Exception ex)
-                {
-                    
                     return NotFound();
                 }
-               
+
+
+                else
+                {
+                    try
+                    {
+                        var image =  System.IO.File.OpenRead(FileHelper.BasePath + file.FileName);
+                        return File(image, "image/jpeg");
+                    }
+                    catch (Exception ex)
+                    {
+                        return NotFound();
+                    }
+
+                }
             }
-            
-                
-            
+           
+            return NotFound();
+
         }
 
         // GET: api/File/5
