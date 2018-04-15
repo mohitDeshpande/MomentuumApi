@@ -24,8 +24,8 @@ namespace MomentuumApi.Model.CivicTrack
         public virtual DbSet<TblCaseItem> TblCaseItem { get; set; }
         public virtual DbSet<TblFiles> TblFiles { get; set; }
 		public virtual DbSet<SignatureCapture> SignatureCapture { get; set; }
-
-		public CivicTrackContext(DbContextOptions<CivicTrackContext> options) : base(options)
+        public virtual DbSet<TblFileStore> TblFileStore { get; set; }
+        public CivicTrackContext(DbContextOptions<CivicTrackContext> options) : base(options)
         { }
 
         // Unable to generate entity type for table 'dbo.Lst_importfieldnames'. Please see the warning messages.
@@ -185,7 +185,28 @@ namespace MomentuumApi.Model.CivicTrack
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			//manual addition, due to lack of primary key
+
+            //Added Table to store files in db
+
+            modelBuilder.Entity<TblFileStore>(entity =>
+            {
+                entity.ToTable("tbl_filestore");
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.Riding).HasColumnName("riding").HasMaxLength(50);
+                entity.Property(e => e.CaseItemId).HasColumnName("caseitemid").HasMaxLength(50);
+                entity.Property(e => e.UserId).HasColumnName("userid").HasMaxLength(50);
+                entity.Property(e => e.FileName).HasColumnName("filename").HasMaxLength(1050);
+                entity.Property(e => e.TimeProcess).HasColumnName("timeprocess").HasMaxLength(50);
+                entity.Property(e => e.Deleted).HasColumnName("deleted").HasMaxLength(50);
+                entity.Property(e => e.Comments).HasColumnName("comments").HasMaxLength(1050);
+                entity.Property(e => e.VoterId).HasColumnName("voterid").HasMaxLength(50);
+                entity.Property(e => e.FileType).HasColumnName("filetype").HasMaxLength(50);
+                entity.Property(e => e.File).HasColumnName("file");
+            });
+
+
+            //manual addition, due to lack of primary key
 
             modelBuilder.Entity<TblFiles>(entity =>
             {
