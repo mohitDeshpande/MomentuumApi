@@ -32,17 +32,34 @@ namespace MomentuumApi.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (FileHelper.FromDB == true)
+            {
+                var result = _context.TblCaseItem.Where(i => i.Caseid.Equals(id) && i.Deleted.Equals("false"))
+                .GroupJoin(_context.TblFiles.Where(f => f.Deleted.Equals("false"))
+                .Select(f => new { f.Id, f.CaseItemId, f.FileName, f.Comments, f.Deleted, f.VoterId, f.Riding, f.TimeProcess }), ci => Convert.ToString(ci.IntId),
+               fi => fi.CaseItemId, (ci, fi) => new { item = ci, file = fi.SingleOrDefault() });
 
-            var result = _context.TblCaseItem.Where(i => i.Caseid.Equals(id) && i.Deleted.Equals("false"))
+                if (result == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(result);
+            }
+            else
+            {
+                var result = _context.TblCaseItem.Where(i => i.Caseid.Equals(id) && i.Deleted.Equals("false"))
                 .GroupJoin(_context.TblFiles.Where(f => f.Deleted.Equals("false")), ci => Convert.ToString(ci.IntId),
                fi => fi.CaseItemId, (ci, fi) => new { item = ci, file = fi.SingleOrDefault() });
 
-            if (result == null)
-            {
-                return NotFound();
-            }
+                if (result == null)
+                {
+                    return NotFound();
+                }
 
-            return Ok(result);
+                return Ok(result);
+            }
+            
         }
        
         // GET: api/CaseItems
@@ -62,20 +79,35 @@ namespace MomentuumApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            //var tblCaseItem = await _context.TblCaseItem.SingleOrDefaultAsync(m => m.IntId == id && m.Deleted.Equals("false"));
-            var result =  _context.TblCaseItem.Where(i => i.IntId.Equals(id) && i.Deleted.Equals("false"))
-               .GroupJoin(_context.TblFiles.Where(f => f.Deleted.Equals("false")), ci => Convert.ToString(ci.IntId),
-              fi => fi.CaseItemId, (ci, fi) => new { item = ci, file = fi.SingleOrDefault() });
-
-
-
-            if (result == null)
+            if (FileHelper.FromDB == true)
             {
-                return NotFound();
-            }
+                var result = _context.TblCaseItem.Where(i => i.IntId.Equals(id) && i.Deleted.Equals("false"))
+              .GroupJoin(_context.TblFileStore.Where(f => f.Deleted.Equals("false"))
+              .Select(f=> new {f.Id, f.CaseItemId,f.FileName,f.Comments,f.Deleted,f.VoterId,f.Riding,f.TimeProcess}), ci => Convert.ToString(ci.IntId),
+             fi => fi.CaseItemId, (ci, fi) => new { item = ci, file = fi.SingleOrDefault() });
+                if (result == null)
+                {
+                    return NotFound();
+                }
 
-            return Ok(result);
+                return Ok(result);
+            }
+            else
+            {
+                var result = _context.TblCaseItem.Where(i => i.IntId.Equals(id) && i.Deleted.Equals("false"))
+              .GroupJoin(_context.TblFiles.Where(f => f.Deleted.Equals("false")), ci => Convert.ToString(ci.IntId),
+             fi => fi.CaseItemId, (ci, fi) => new { item = ci, file = fi.SingleOrDefault() });
+
+
+
+                if (result == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(result);
+            }
+            
         }
 
         // PUT: api/CaseItems/5
