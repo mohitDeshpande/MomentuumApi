@@ -13,12 +13,12 @@ namespace MomentuumApi.Utils
         // Default Set in AppSettings 
        
         private static string basePath;
-        private static bool fromDB;
+        private static bool useDB;
 
-        public static bool FromDB
+        public static bool UseDB
         {
-            get { return fromDB; }
-            set { fromDB = value; }
+            get { return useDB; }
+            set { useDB = value; }
         }
 
         public static string BasePath

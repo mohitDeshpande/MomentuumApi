@@ -32,7 +32,7 @@ namespace MomentuumApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (FileHelper.FromDB == true)
+            if (FileHelper.UseDB == true)
             {
                 var result = _context.TblCaseItem.Where(i => i.Caseid.Equals(id) && i.Deleted.Equals("false"))
                 .GroupJoin(_context.TblFiles.Where(f => f.Deleted.Equals("false"))
@@ -79,7 +79,7 @@ namespace MomentuumApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-            if (FileHelper.FromDB == true)
+            if (FileHelper.UseDB == true)
             {
                 var result = _context.TblCaseItem.Where(i => i.IntId.Equals(id) && i.Deleted.Equals("false"))
               .GroupJoin(_context.TblFileStore.Where(f => f.Deleted.Equals("false"))

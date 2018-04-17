@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,5 +20,7 @@ namespace MomentuumApi.Model.CivicTrack
         public string VoterId { get; set; }
         public string FileType { get; set; }
         public Byte[] File { get; set; }
+        [NotMapped]
+        public IFormFile FileUpload { get; set; }
     }
 }
