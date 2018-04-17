@@ -131,14 +131,16 @@ namespace MomentuumApi.Controllers
             var caseType = _context.TblCaseType.Where(x => x.listtext != null && x.listtext != "" && x.id.Equals(div)).Distinct().ToList();
             var caseStatus = _context.TblCaseStatus.Where(x => x.listtext != null && x.listtext != "" && x.id.Equals(div)).Distinct().ToList();
             var caseAssignedTo = _context.TblEmployees.Where(x => x.Riding.Equals(div)).ToList();
+			var signed = _context.SignatureCapture.FirstOrDefault(x => x.Case_id.Equals(id)).SignatureData;
 
             caseInfo.casecode = caseCode;
             caseInfo.casedetails = clientCase;
             caseInfo.casetype = caseType;
             caseInfo.casestatus = caseStatus;
             caseInfo.caseassignedto = caseAssignedTo;
+			caseInfo.signed = signed;
 
-            if (clientCase == null)
+			if (clientCase == null)
             {
                 return NotFound();
             }
