@@ -211,6 +211,8 @@ namespace MomentuumApi.Controllers
 		[HttpPut("{id}"), Authorize]
         public async Task<IActionResult> PutTblCase([FromRoute] int? id, [FromBody] TblCase tblCase)
         {
+            tblCase.Createdby = JwtHelper.GetUser(HttpContext.User.Claims).ToUpper();
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -250,6 +252,8 @@ namespace MomentuumApi.Controllers
             {
                 return BadRequest(ModelState);
             }
+            tblCase.Createdby = JwtHelper.GetUser(HttpContext.User.Claims).ToUpper();
+            tblCase.Userid = JwtHelper.GetUser(HttpContext.User.Claims).ToUpper();
 
             _context.TblCase.Add(tblCase);
             await _context.SaveChangesAsync();
