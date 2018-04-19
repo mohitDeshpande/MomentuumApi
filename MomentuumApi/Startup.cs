@@ -38,7 +38,8 @@ namespace MomentuumApi
 			//services.AddDbContext<MobileDBContext>(options => options.UseSqlServer(oldConnection));
 
 			var civicTrackConnection = $"Server={Configuration["database:server"]},{Configuration["database:port"]};Database={Configuration["database:civicTrackDb"]};Trusted_Connection=False;uid={Configuration["database:uid"]};pwd={Configuration["database:pwd"]}";
-            services.AddDbContext<CivicTrackContext>(options => options.UseSqlServer(civicTrackConnection));
+			
+			services.AddDbContext<CivicTrackContext>(options => options.UseSqlServer(civicTrackConnection));
 
 			services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
